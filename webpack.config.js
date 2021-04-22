@@ -29,7 +29,12 @@ const config = {
             }
         ]
     },
-
+    stats: {
+        colors: true
+    },
+    // change
+    // improve debugging by using a source map
+    devtool: 'source-map',
     plugins: [
         new htmlWebpackPlugin({
             title: 'Ceros Ski'
