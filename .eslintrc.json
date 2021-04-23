@@ -55,10 +55,16 @@
         "no-duplicate-imports": 1,
         "no-const-assign": 1,
 
-        "curly": ["error", "all"]
+        "curly": ["error", "all"],
+
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error"
     },
     "extends": ["plugin:prettier/recommended"],
-    "plugins": ["prettier"], // classPrivateProperties and classPrivateMethods
+    "plugins": ["prettier", "jest"], // classPrivateProperties and classPrivateMethods
     
     "parserOptions": {
       "ecmaVersion": 12,

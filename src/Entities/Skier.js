@@ -124,7 +124,7 @@ export class Skier extends Entity {
 
     // change
     getTurnLeftX(name) {
-        console.log(name, Constants.OBSTACLE_SIZE);
+        // console.log(name, Constants.OBSTACLE_SIZE);
         if (Constants.OBSTACLE_SIZE[name]) {
             return (Constants.OBSTACLE_SIZE[name] / 2) + 5;
         }
@@ -151,8 +151,8 @@ export class Skier extends Entity {
     }
 
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
-        console.log(obstacleManager, assetManager);
-        console.log('this.assetName', this.assetName);
+        // console.log(obstacleManager, assetManager);
+        // console.log('this.assetName', this.assetName);
         const asset = assetManager.getAsset(this.assetName);
         
         const skierBounds = new Rect(
@@ -177,7 +177,7 @@ export class Skier extends Entity {
         
         
         if (collision) {
-            console.warn('========> collision', collision);
+            // console.warn('========> collision', collision);
             // console.warn(obstacleManager, assetManager);
             // console.warn(asset);
             this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
