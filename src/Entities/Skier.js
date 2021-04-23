@@ -3,13 +3,15 @@ import { Entity } from "./Entity";
 import { intersectTwoRects, Rect } from "../Core/Utils";
 
 export class Skier extends Entity {
-    assetName = Constants.SKIER_DOWN;
+    // assetName = Constants.SKIER_DOWN;
+    _assetName = Constants.SKIER_DOWN;
 
-    direction = Constants.SKIER_DIRECTIONS.DOWN;
+    _direction = Constants.SKIER_DIRECTIONS.DOWN;
     speed = Constants.SKIER_STARTING_SPEED;
 
-    constructor(x, y) {
+    constructor(x, y, _game) {
         super(x, y);
+        this.game = _game
     }
 
     setDirection(direction) {
@@ -17,7 +19,33 @@ export class Skier extends Entity {
         this.updateAsset();
     }
 
+    // change
+    get assetName() {
+        return this._assetName
+    }
+
+    // change
+    set assetName(name) {
+        if (typeof name !== 'string') {
+            throw new Error('Skier asset name must be a string')
+        }
+        // console.info('set assetName', name)
+        this._assetName = name
+    }
+
+    get direction() {
+        return this._direction
+    }
+
+    // change
+    set direction(direction) {
+        // console.info('set direction', direction)
+        this._direction = direction
+    }
+
     updateAsset() {
+        // console.log('------------< updateAsset')
+        // console.log(this.direction, Constants.SKIER_DIRECTION_ASSET)
         this.assetName = Constants.SKIER_DIRECTION_ASSET[this.direction];
     }
 
@@ -61,13 +89,37 @@ export class Skier extends Entity {
         this.y -= Constants.SKIER_STARTING_SPEED;
     }
 
+    // change
     turnLeft() {
         if(this.direction === Constants.SKIER_DIRECTIONS.LEFT) {
             this.moveSkierLeft();
         }
         else {
-            this.setDirection(this.direction - 1);
+            if (this.direction === 0) {
+                
+                // set face to left
+                this.setDirection(1);
+                
+                const x = this.getTurnLeftX(this.game.obstacle.assetName)
+
+                // place left after the obstacle
+                this.x = this.game.obstacle.x - x;
+
+                this.game.resetObstacle()
+            } else {
+                this.setDirection(this.direction - 1);
+            }
+            
         }
+    }
+
+    // change
+    getTurnLeftX(name) {
+        console.log(name, Constants.OBSTACLE_SIZE)
+        if (Constants.OBSTACLE_SIZE[name]) {
+            return (Constants.OBSTACLE_SIZE[name] / 2) + 5
+        }
+        return 0
     }
 
     turnRight() {
@@ -90,7 +142,9 @@ export class Skier extends Entity {
     }
 
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
+        
         const asset = assetManager.getAsset(this.assetName);
+        
         const skierBounds = new Rect(
             this.x - asset.width / 2,
             this.y - asset.height / 2,
@@ -110,9 +164,19 @@ export class Skier extends Entity {
 
             return intersectTwoRects(skierBounds, obstacleBounds);
         });
-
-        if(collision) {
+        
+        
+        if (collision) {
+            console.warn('========> collision', collision);
+            // console.warn(obstacleManager, assetManager);
+            // console.warn(asset);
             this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
+            // console.warn('========> end collision', collision);
+            // change
+            // debug pause
+            return collision
         }
+
+        return false
     };
 }

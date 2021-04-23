@@ -28,6 +28,13 @@ export const ASSETS = {
     [ROCK2] : 'img/rock_2.png'
 };
 
+export const OBSTACLE_SIZE = {
+    [TREE] : 43,
+    [TREE_CLUSTER] : 88,
+    [ROCK1] : 40,
+    [ROCK2] : 49
+};
+
 export const SKIER_DIRECTIONS = {
     CRASH : 0,
     LEFT : 1,

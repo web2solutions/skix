@@ -1,3 +1,4 @@
+
 import * as Constants from "../Constants";
 import { AssetManager } from "./AssetManager";
 import { Canvas } from './Canvas';
@@ -8,10 +9,15 @@ import { Rect } from './Utils';
 export class Game {
     gameWindow = null;
 
+    // change
+    // pause UpdateGameWindow
+    _pause = false
+    _obstacle = null
+
     constructor() {
         this.assetManager = new AssetManager();
         this.canvas = new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
-        this.skier = new Skier(0, 0);
+        this.skier = new Skier(0, 0, this);
         this.obstacleManager = new ObstacleManager();
 
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
@@ -19,6 +25,26 @@ export class Game {
 
     init() {
         this.obstacleManager.placeInitialObstacles();
+    }
+
+    
+    set pause(state) {
+        this._pause = state
+    }
+    
+    get pause() {
+        return this._pause
+    }
+
+    set obstacle(state) {
+        this._obstacle = state
+    }
+    get obstacle() {
+        return this._obstacle
+    }
+
+    resetObstacle() {
+        this.obstacle = null
     }
 
     async load() {
@@ -35,6 +61,12 @@ export class Game {
     }
 
     updateGameWindow() {
+        // change
+        // if is there a hit, then pause updateGameWindow
+        if (this.pause) {
+            return
+        }
+        
         this.skier.move();
 
         const previousGameWindow = this.gameWindow;
@@ -42,7 +74,15 @@ export class Game {
 
         this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
 
-        this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+        // change
+        // if is there a hit, then pause updateGameWindow
+        const isCrash = this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+        // console.log('isCrash', isCrash)
+        if (isCrash) {
+            this.obstacle = isCrash
+            this.pause = true
+        }
+        
     }
 
     drawGameWindow() {
@@ -63,18 +103,30 @@ export class Game {
     handleKeyDown(event) {
         switch(event.which) {
             case Constants.KEYS.LEFT:
+                if (this.pause) { 
+                    this.pause = false
+                }
                 this.skier.turnLeft();
                 event.preventDefault();
                 break;
             case Constants.KEYS.RIGHT:
+                if (this.pause) {
+                    break
+                }
                 this.skier.turnRight();
                 event.preventDefault();
                 break;
             case Constants.KEYS.UP:
+                if (this.pause) {
+                    break
+                }
                 this.skier.turnUp();
                 event.preventDefault();
                 break;
             case Constants.KEYS.DOWN:
+                if (this.pause) {
+                    break
+                }
                 this.skier.turnDown();
                 event.preventDefault();
                 break;

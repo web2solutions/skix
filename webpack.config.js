@@ -4,6 +4,8 @@ require("@babel/register");
 
 // Webpack Configuration
 const config = {
+    // this is under development until it has no bugs
+    mode: 'development',
 
     entry: ['babel-polyfill', './src/index.js'],
 
