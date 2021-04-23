@@ -7,12 +7,12 @@ import { ObstacleManager } from "../Entities/Obstacles/ObstacleManager";
 import { Rect } from './Utils';
 
 export class Game {
-    gameWindow = null;
+    #_gameWindow = null;
 
     // change
     // pause UpdateGameWindow
-    _pause = false
-    _obstacle = null
+    #_pause = false
+    #_obstacle = null
 
     constructor() {
         this.assetManager = new AssetManager();
@@ -29,22 +29,22 @@ export class Game {
 
     
     set pause(state) {
-        this._pause = state
+        this.#_pause = state;
     }
     
     get pause() {
-        return this._pause
+        return this.#_pause;
     }
 
     set obstacle(state) {
-        this._obstacle = state
+        this.#_obstacle = state;
     }
     get obstacle() {
-        return this._obstacle
+        return this.#_obstacle;
     }
 
     resetObstacle() {
-        this.obstacle = null
+        this.obstacle = null;
     }
 
     async load() {
@@ -64,29 +64,29 @@ export class Game {
         // change
         // if is there a hit, then pause updateGameWindow
         if (this.pause) {
-            return
+            return;
         }
         
         this.skier.move();
 
-        const previousGameWindow = this.gameWindow;
+        const previousGameWindow = this.#_gameWindow;
         this.calculateGameWindow();
 
-        this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
+        this.obstacleManager.placeNewObstacle(this.#_gameWindow, previousGameWindow);
 
         // change
         // if is there a hit, then pause updateGameWindow
         const isCrash = this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
         // console.log('isCrash', isCrash)
         if (isCrash) {
-            this.obstacle = isCrash
-            this.pause = true
+            this.obstacle = isCrash;
+            this.pause = true;
         }
         
     }
 
     drawGameWindow() {
-        this.canvas.setDrawOffset(this.gameWindow.left, this.gameWindow.top);
+        this.canvas.setDrawOffset(this.#_gameWindow.left, this.#_gameWindow.top);
 
         this.skier.draw(this.canvas, this.assetManager);
         this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
@@ -97,37 +97,40 @@ export class Game {
         const left = skierPosition.x - (Constants.GAME_WIDTH / 2);
         const top = skierPosition.y - (Constants.GAME_HEIGHT / 2);
 
-        this.gameWindow = new Rect(left, top, left + Constants.GAME_WIDTH, top + Constants.GAME_HEIGHT);
+        this.#_gameWindow = new Rect(left, top, left + Constants.GAME_WIDTH, top + Constants.GAME_HEIGHT);
     }
 
     handleKeyDown(event) {
         switch(event.which) {
             case Constants.KEYS.LEFT:
                 if (this.pause) { 
-                    this.pause = false
+                    this.pause = false;
                 }
                 this.skier.turnLeft();
                 event.preventDefault();
                 break;
             case Constants.KEYS.RIGHT:
                 if (this.pause) {
-                    break
+                    break;
                 }
                 this.skier.turnRight();
                 event.preventDefault();
                 break;
             case Constants.KEYS.UP:
                 if (this.pause) {
-                    break
+                    break;
                 }
                 this.skier.turnUp();
                 event.preventDefault();
                 break;
             case Constants.KEYS.DOWN:
                 if (this.pause) {
-                    break
+                    break;
                 }
                 this.skier.turnDown();
+                event.preventDefault();
+                break;
+            default:
                 event.preventDefault();
                 break;
         }
