@@ -4,8 +4,8 @@
   "description": "Ceros full stack developer code challenge",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --mode development",
-    "webpack": "webpack webpack --mode production",
+    "dev": "webpack serve --mode development",
+    "webpack": "webpack --mode production",
     "build": "npm run lint && npm run rm && npm run doc && npm run webpack",
     "rm": "rm -rf ./dist && mkdir dist/ && cp -a html_app/. dist",
     "lint": "eslint src --ext .js",
@@ -19,12 +19,9 @@
   "license": "",
   "homepage": "https://github.com/ceros/ceros-ski#readme",
   "devDependencies": {
-
     "@babel/node": "^7.2.2",
     "jest": "^24.7.1",
-    "babel-polyfill": "^6.26.0",
     "file-loader": "^3.0.1",
-
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@babel/eslint-parser": "^7.12.1",
@@ -36,9 +33,6 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "@babel/register": "^7.12.10",
-    "@cypress/code-coverage": "^3.9.2",
-    "@rollup/plugin-babel": "^5.2.3",
-    "assert": "^2.0.0",
     "babel-loader": "^8.2.2",
     "eslint": "^7.18.0",
     "eslint-config-prettier": "^7.2.0",
@@ -51,7 +45,12 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "core-js": "^2.6.12",
     "css-loader": "^2.1.1",
     "style-loader": "^0.23.1"
-  }
+  },
+  "presets": [
+    "@babel/preset-env"
+  ]
 }
