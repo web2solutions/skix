@@ -4,14 +4,18 @@ import { intersectTwoRects, Rect } from "../Core/Utils";
 
 export class Skier extends Entity {
     // assetName = Constants.SKIER_DOWN;
-    _assetName = Constants.SKIER_DOWN;
-
-    _direction = Constants.SKIER_DIRECTIONS.DOWN;
-    speed = Constants.SKIER_STARTING_SPEED;
+    _assetName
+    #_direction
+    #_speed
 
     constructor(x, y, _game) {
         super(x, y);
-        this.game = _game
+        this.game = _game;
+
+        this._assetName = Constants.SKIER_DOWN;
+
+        this.#_direction = Constants.SKIER_DIRECTIONS.DOWN;
+        this.#_speed = Constants.SKIER_STARTING_SPEED;
     }
 
     setDirection(direction) {
@@ -21,26 +25,29 @@ export class Skier extends Entity {
 
     // change
     get assetName() {
-        return this._assetName
+        return this._assetName;
     }
 
     // change
     set assetName(name) {
         if (typeof name !== 'string') {
-            throw new Error('Skier asset name must be a string')
+            throw new Error('Skier asset name must be a string');
         }
         // console.info('set assetName', name)
-        this._assetName = name
+        if (name === '') {
+            name = Constants.SKIER_DOWN;
+        }
+        this._assetName = name;
     }
 
     get direction() {
-        return this._direction
+        return this.#_direction;
     }
 
     // change
     set direction(direction) {
         // console.info('set direction', direction)
-        this._direction = direction
+        this.#_direction = direction;
     }
 
     updateAsset() {
@@ -60,6 +67,8 @@ export class Skier extends Entity {
             case Constants.SKIER_DIRECTIONS.RIGHT_DOWN:
                 this.moveSkierRightDown();
                 break;
+            default:
+                break;
         }
     }
 
@@ -68,17 +77,17 @@ export class Skier extends Entity {
     }
 
     moveSkierLeftDown() {
-        this.x -= this.speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
-        this.y += this.speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
+        this.x -= this.#_speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
+        this.y += this.#_speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
     }
 
     moveSkierDown() {
-        this.y += this.speed;
+        this.y += this.#_speed;
     }
 
     moveSkierRightDown() {
-        this.x += this.speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
-        this.y += this.speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
+        this.x += this.#_speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
+        this.y += this.#_speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
     }
 
     moveSkierRight() {
@@ -100,12 +109,12 @@ export class Skier extends Entity {
                 // set face to left
                 this.setDirection(1);
                 
-                const x = this.getTurnLeftX(this.game.obstacle.assetName)
+                const x = this.getTurnLeftX(this.game.obstacle.assetName);
 
                 // place left after the obstacle
                 this.x = this.game.obstacle.x - x;
 
-                this.game.resetObstacle()
+                this.game.resetObstacle();
             } else {
                 this.setDirection(this.direction - 1);
             }
@@ -115,11 +124,11 @@ export class Skier extends Entity {
 
     // change
     getTurnLeftX(name) {
-        console.log(name, Constants.OBSTACLE_SIZE)
+        console.log(name, Constants.OBSTACLE_SIZE);
         if (Constants.OBSTACLE_SIZE[name]) {
-            return (Constants.OBSTACLE_SIZE[name] / 2) + 5
+            return (Constants.OBSTACLE_SIZE[name] / 2) + 5;
         }
-        return 0
+        return 0;
     }
 
     turnRight() {
@@ -142,7 +151,8 @@ export class Skier extends Entity {
     }
 
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
-        
+        console.log(obstacleManager, assetManager);
+        console.log('this.assetName', this.assetName);
         const asset = assetManager.getAsset(this.assetName);
         
         const skierBounds = new Rect(
@@ -174,9 +184,9 @@ export class Skier extends Entity {
             // console.warn('========> end collision', collision);
             // change
             // debug pause
-            return collision
+            return collision;
         }
 
-        return false
+        return false;
     };
 }
