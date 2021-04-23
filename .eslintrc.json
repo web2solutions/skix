@@ -9,6 +9,8 @@
         
         // Erros
         "valid-typeof": 2,
+
+        "semi": ["error", "always"],
         
         // Best Practices
         //"no-useless-escape": 1,
@@ -24,7 +26,7 @@
         "no-undef": 2,
         "no-undef-init": 2,
 
-        "comma-dangle": 0,
+        "comma-dangle": 2,
 
         "one-var": 0,
         "spaced-comment": 2,
@@ -37,7 +39,7 @@
 
         "no-console": "off",
         "no-debugger": "off",
-        "no-unused-vars": 0,
+        "no-unused-vars": 2,
         "prettier/prettier": 0,
         
         // Node
