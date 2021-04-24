@@ -1,3 +1,7 @@
+/**
+ * import binary assets
+ * This provides support to unit test alongside visual test
+ */
 
 import skier_crash_bin from '../bin/skier_crash_bin';
 import skier_left_bin from '../bin/skier_left_bin';
@@ -5,17 +9,16 @@ import skier_left_down_bin from '../bin/skier_left_down_bin';
 import skier_down_bin from '../bin/skier_down_bin';
 import skier_right_down_bin from '../bin/skier_right_down_bin';
 import skier_right_bin from '../bin/skier_right_bin';
-
 import tree_1_bin from '../bin/tree_1_bin';
 import tree_cluster_bin from '../bin/tree_cluster_bin';
 import rock_1_bin from '../bin/rock_1_bin';
 import rock_2_bin from '../bin/rock_2_bin';
 import jump_ramp_bin from '../bin/jump_ramp_bin';
 
-
-
-export const GAME_WIDTH = window.innerWidth;
-export const GAME_HEIGHT = window.innerHeight;
+export const DISTANCE_BETWEEN_OBSTACLES = 50;
+export const STARTING_OBSTACLE_GAP = 100;
+export const STARTING_OBSTACLE_REDUCER = 300;
+export const NEW_OBSTACLE_CHANCE = 8;
 
 export const SKIER_CRASH = 'skierCrash';
 export const SKIER_LEFT = 'skierLeft';
