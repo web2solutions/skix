@@ -1,11 +1,7 @@
 /* global describe it cy,  before */
 import * as Constants from "../../src/Constants";
-// import '../css/game.css';
 import { Game } from '../../src/Core/Game.js';
 
-document.addEventListener("DOMContentLoaded",() => {
-    
-});
 describe('#--- SkiFree test suite', () => {
     let skiGame = null;
     
@@ -22,9 +18,7 @@ describe('#--- SkiFree test suite', () => {
 
     describe('Crash bug must be solved', () => {
         
-        it('Start game and wait until the skier chashes', {
-            defaultCommandTimeout: 100000
-          }, () => {
+        it('Start game and wait until the skier chashes', () => {
             cy.wrap(skiGame).should('have.property', 'pause', true);
         });
 
