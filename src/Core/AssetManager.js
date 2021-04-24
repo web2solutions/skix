@@ -8,7 +8,6 @@ export class AssetManager {
         const assetPromises = [];
 
         for (const [assetName, assetUrl] of Object.entries(assets)) {
-            // console.log('loadAssets', assetName);
             const assetPromise = this.loadSingleAsset(assetUrl, assetName);
             assetPromises.push(assetPromise);
         }
@@ -22,7 +21,6 @@ export class AssetManager {
             assetImage.onload = () => {
                 assetImage.width /= 2;
                 assetImage.height /= 2;
-
                 this.loadedAssets[assetName] = assetImage;
                 resolve();
             };
