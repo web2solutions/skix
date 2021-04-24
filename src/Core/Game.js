@@ -17,7 +17,7 @@ export class Game {
     constructor(win) {
         this.window = win || window;
         this.dom = this.window.document;
-        
+        this.dom.body.style = 'width: 100wv; heigth: 100hv; padding: 0px; margin: 0px;';
         this.assetManager = new AssetManager();
         this.canvas = new Canvas(this.window.innerWidth, this.window.innerHeight, this.window);
         this.skier = new Skier(0, 0, this);
