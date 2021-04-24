@@ -3,19 +3,15 @@ import { Entity } from "./Entity";
 import { intersectTwoRects, Rect } from "../Core/Utils";
 
 export class Skier extends Entity {
-    // assetName = Constants.SKIER_DOWN;
-    _assetName
-    #_direction
-    #_speed
+    
+    #_direction = Constants.SKIER_DIRECTIONS.DOWN;
+    #_speed = Constants.SKIER_STARTING_SPEED;
 
     constructor(x, y, _game) {
         super(x, y);
         this.game = _game;
 
-        this._assetName = Constants.SKIER_DOWN;
-
-        this.#_direction = Constants.SKIER_DIRECTIONS.DOWN;
-        this.#_speed = Constants.SKIER_STARTING_SPEED;
+        this.assetName = Constants.SKIER_DOWN;
     }
 
     setDirection(direction) {
@@ -23,22 +19,7 @@ export class Skier extends Entity {
         this.updateAsset();
     }
 
-    // change
-    get assetName() {
-        return this._assetName;
-    }
-
-    // change
-    set assetName(name) {
-        if (typeof name !== 'string') {
-            throw new Error('Skier asset name must be a string');
-        }
-        // console.info('set assetName', name)
-        if (name === '') {
-            name = Constants.SKIER_DOWN;
-        }
-        this._assetName = name;
-    }
+    
 
     get direction() {
         return this.#_direction;

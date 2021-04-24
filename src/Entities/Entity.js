@@ -2,7 +2,9 @@ export class Entity {
     x = 0;
     y = 0;
 
-    assetName = '';
+    // change
+    // assetName = '';
+    _assetName = '';
 
     constructor(x, y) {
         this.x = x;
@@ -11,6 +13,20 @@ export class Entity {
 
     getAssetName() {
         return this.assetName;
+    }
+
+    // change
+    get assetName() {
+        return this._assetName;
+    }
+
+    // change
+    set assetName(name) {
+        if (typeof name !== 'string') {
+            throw new Error('Skier asset name must be a string');
+        }
+        console.info('set assetName', name);
+        this._assetName = name;
     }
 
     getPosition() {
