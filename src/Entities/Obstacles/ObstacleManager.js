@@ -2,15 +2,11 @@ import * as Constants from '../../Constants';
 import { randomInt } from '../../Core/Utils';
 import { Obstacle } from "./Obstacle";
 
-const DISTANCE_BETWEEN_OBSTACLES = 50;
-const STARTING_OBSTACLE_GAP = 100;
-const STARTING_OBSTACLE_REDUCER = 300;
-const NEW_OBSTACLE_CHANCE = 8;
-
 export class ObstacleManager {
     obstacles = [];
 
-    constructor() {
+    constructor(win) {
+        this.window = win || window;
     }
 
     getObstacles() {
@@ -24,12 +20,12 @@ export class ObstacleManager {
     }
 
     placeInitialObstacles() {
-        const numberObstacles = Math.ceil((Constants.GAME_WIDTH / STARTING_OBSTACLE_REDUCER) * (Constants.GAME_HEIGHT / STARTING_OBSTACLE_REDUCER));
+        const numberObstacles = Math.ceil((this.window.innerWidth / Constants.STARTING_OBSTACLE_REDUCER) * (this.window.innerHeight / Constants.STARTING_OBSTACLE_REDUCER));
 
-        const minX = -Constants.GAME_WIDTH / 2;
-        const maxX = Constants.GAME_WIDTH / 2;
-        const minY = STARTING_OBSTACLE_GAP;
-        const maxY = Constants.GAME_HEIGHT / 2;
+        const minX = -this.window.innerWidth / 2;
+        const maxX = this.window.innerWidth / 2;
+        const minY = Constants.STARTING_OBSTACLE_GAP;
+        const maxY = this.window.innerHeight / 2;
 
         for(let i = 0; i < numberObstacles; i++) {
             this.placeRandomObstacle(minX, maxX, minY, maxY);
@@ -41,8 +37,8 @@ export class ObstacleManager {
     }
 
     placeNewObstacle(gameWindow, previousGameWindow) {
-        const shouldPlaceObstacle = randomInt(1, NEW_OBSTACLE_CHANCE);
-        if(shouldPlaceObstacle !== NEW_OBSTACLE_CHANCE) {
+        const shouldPlaceObstacle = randomInt(1, Constants.NEW_OBSTACLE_CHANCE);
+        if(shouldPlaceObstacle !== Constants.NEW_OBSTACLE_CHANCE) {
             return;
         }
 
@@ -90,10 +86,10 @@ export class ObstacleManager {
 
         const foundCollision = this.obstacles.find((obstacle) => {
             return (
-                x > (obstacle.x - DISTANCE_BETWEEN_OBSTACLES) &&
-                x < (obstacle.x + DISTANCE_BETWEEN_OBSTACLES) &&
-                y > (obstacle.y - DISTANCE_BETWEEN_OBSTACLES) &&
-                y < (obstacle.y + DISTANCE_BETWEEN_OBSTACLES)
+                x > (obstacle.x - Constants.DISTANCE_BETWEEN_OBSTACLES) &&
+                x < (obstacle.x + Constants.DISTANCE_BETWEEN_OBSTACLES) &&
+                y > (obstacle.y - Constants.DISTANCE_BETWEEN_OBSTACLES) &&
+                y < (obstacle.y + Constants.DISTANCE_BETWEEN_OBSTACLES)
             );
         });
 
