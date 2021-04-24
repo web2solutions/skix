@@ -1,6 +1,6 @@
 const path = require('path');
 const htmlWebpackPlugin = require('html-webpack-plugin')
-require("@babel/register");
+// require("@babel/register");
 
 // Webpack Configuration
 const config = {
@@ -17,14 +17,19 @@ const config = {
     module: {
         rules : [
             {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: ['babel-loader'],
-            },
-            {
-                test: /\.css$/,
+                test: /\.m?js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                  loader: 'babel-loader',
+                  options: {
+                    presets: ['@babel/preset-env']
+                  }
+                }
+              },
+              {
+                test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
-            },
+              },
             {
                 test: /\.png$/,
                 use: ['file-loader'],
