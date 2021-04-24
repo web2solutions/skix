@@ -9,25 +9,25 @@ export class Canvas {
     };
     ctx = null;
 
-    constructor(width, height) {
+    constructor(width, height, win) {
         this.width = width;
         this.height = height;
 
-        this.createCanvas();
+        this.createCanvas(win);
     }
 
-    createCanvas() {
-        const canvas = document.createElement('canvas');
+    createCanvas(win) {
+        const canvas = win.document.createElement('canvas');
         canvas.id = "skiCanvas";
-        canvas.width = this.width * window.devicePixelRatio;
-        canvas.height = this.height * window.devicePixelRatio;
+        canvas.width = this.width * win.devicePixelRatio;
+        canvas.height = this.height * win.devicePixelRatio;
         canvas.style.width = this.width + 'px';
         canvas.style.height = this.height + 'px';
 
         this.ctx = canvas.getContext("2d");
-        this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        this.ctx.scale(win.devicePixelRatio, win.devicePixelRatio);
 
-        document.body.appendChild(canvas);
+        win.document.body.appendChild(canvas);
     }
 
     clearCanvas() {
