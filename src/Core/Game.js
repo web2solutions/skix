@@ -14,13 +14,16 @@ export class Game {
     #_pause = false
     #_obstacle = null
 
-    constructor() {
+    constructor(win) {
+        this.window = win || window;
+        this.dom = this.window.document;
+        
         this.assetManager = new AssetManager();
-        this.canvas = new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
+        this.canvas = new Canvas(this.window.innerWidth, this.window.innerHeight, this.window);
         this.skier = new Skier(0, 0, this);
-        this.obstacleManager = new ObstacleManager();
+        this.obstacleManager = new ObstacleManager(this.window);
 
-        document.addEventListener('keydown', this.handleKeyDown.bind(this));
+        this.dom.addEventListener('keydown', this.handleKeyDown.bind(this));
     }
 
     init() {
@@ -52,6 +55,7 @@ export class Game {
     }
 
     run() {
+        // console.log('-----> run');
         this.canvas.clearCanvas();
 
         this.updateGameWindow();
@@ -94,10 +98,18 @@ export class Game {
 
     calculateGameWindow() {
         const skierPosition = this.skier.getPosition();
-        const left = skierPosition.x - (Constants.GAME_WIDTH / 2);
-        const top = skierPosition.y - (Constants.GAME_HEIGHT / 2);
+        const left = skierPosition.x - (this.window.innerWidth / 2);
+        const top = skierPosition.y - (this.window.innerHeight / 2);
 
-        this.#_gameWindow = new Rect(left, top, left + Constants.GAME_WIDTH, top + Constants.GAME_HEIGHT);
+        this.#_gameWindow = new Rect(left, top, left + this.window.innerWidth, top + this.window.innerHeight);
+    }
+
+    triggerKeyDown(key = Constants.KEYS.DOWN) {
+        const evt = this.dom.createEvent( 'Events' );
+        evt.initEvent('keydown', true, true);
+        evt.which = key;
+        evt.keyCode = key;
+        this.dom.dispatchEvent( evt );
     }
 
     handleKeyDown(event) {
