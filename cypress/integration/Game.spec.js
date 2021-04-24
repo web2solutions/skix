@@ -6,7 +6,7 @@ import { Game } from '../../src/Core/Game.js';
 document.addEventListener("DOMContentLoaded",() => {
     
 });
-describe('#--- FreeSki test suite', () => {
+describe('#--- SkiFree test suite', () => {
     let skiGame = null;
     
     before(function () {

@@ -11,7 +11,7 @@
     "rm": "rm -rf ./dist && mkdir dist/ && mkdir dist/css && mkdir dist/img && cp -a html_app/. dist  && cp -a css/. dist/css  && cp -a img/. dist/img",
     "lint": "eslint src --ext .js",
     "test": "npm run lint && npm run cy:run",
-    "cy:run": "cypress run --spec \"cypress/integration/*\" --reporter mochawesome",
+    "cy:run": "cypress run --spec \"cypress/integration/*\"",
     "cy:open": "cypress open && cypress run"
   },
   "repository": {
