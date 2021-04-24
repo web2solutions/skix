@@ -25,7 +25,6 @@ export class Entity {
         if (typeof name !== 'string') {
             throw new Error('Skier asset name must be a string');
         }
-        console.info('set assetName', name);
         this._assetName = name;
     }
 
