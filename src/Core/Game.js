@@ -83,6 +83,10 @@ export class Game {
         if (this.pause) {
             return;
         }
+
+        if (!this.skier.isMoving) {
+            return;
+        }
         
         this.skier.move();
 
