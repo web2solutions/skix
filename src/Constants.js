@@ -49,13 +49,11 @@ export const SKIER_DOUBLE_SPEED_TIMER = 1000;
 
 export const ASSETS = {
     [SKIER_CRASH]: skier_crash_bin.img,
-
     [SKIER_JUMP1]: skier_jump_1_bin.img,
     [SKIER_JUMP2]: skier_jump_2_bin.img,
     [SKIER_JUMP3]: skier_jump_3_bin.img,
     [SKIER_JUMP4]: skier_jump_4_bin.img,
     [SKIER_JUMP5]: skier_jump_5_bin.img,
-
     [SKIER_LEFT]: skier_left_bin.img,
     [SKIER_LEFTDOWN]: skier_left_down_bin.img,
     [SKIER_DOWN]: skier_down_bin.img,

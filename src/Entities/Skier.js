@@ -10,7 +10,8 @@ export class Skier extends Entity {
     #_stepUp = 0;
     #_positionBeforeJump = null;
     #_directionBeforeJump = null;
-    #_jumpingTimeOut
+    #_jumpingTimeOut = null;
+    #_style = 0;
     constructor(x, y, _game) {
         super(x, y);
         this.game = _game;
@@ -29,6 +30,14 @@ export class Skier extends Entity {
 
     get isIdle() {
         return (this.direction === 1 || this.direction === 5);
+    }
+
+    get speed() {
+        return this.#_speed;
+    }
+
+    get style() {
+        return this.#_style;
     }
 
     get isJumping() {
@@ -71,6 +80,7 @@ export class Skier extends Entity {
     moveSkierLeftDown() {
         this.x -= this.#_speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
         this.y += this.#_speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
+        this.#_style += 1;
     }
 
     moveSkierDown() {
@@ -80,6 +90,7 @@ export class Skier extends Entity {
     moveSkierRightDown() {
         this.x += this.#_speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
         this.y += this.#_speed / Constants.SKIER_DIAGONAL_SPEED_REDUCER;
+        this.#_style += 1;
     }
 
     moveSkierRight() {
@@ -170,7 +181,7 @@ export class Skier extends Entity {
                     this.#_isJumping = false;
                 }, Constants.SKIER_DOUBLE_SPEED_TIMER);
             }
-
+            this.#_style += 5;
             this.setDirection(this.#_directionBeforeJump);
             this.#_positionBeforeJump = 0;
         } else {
@@ -212,6 +223,8 @@ export class Skier extends Entity {
                     return false;
                 }
             }
+            this.game.statsBoard.setSpeed(0);
+            this.#_style -= 5;
             this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
             return collision;
         }

@@ -39,7 +39,7 @@ const config = {
     devtool: 'source-map',
     plugins: [
         new htmlWebpackPlugin({
-            title: 'Ceros Ski'
+            title: 'SkiFree Game'
         })
     ],
 };

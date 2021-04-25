@@ -71,9 +71,10 @@ export class Game {
 
         this.updateGameWindow();
         this.drawGameWindow();
+        
 
         requestAnimationFrame(this.run.bind(this));
-        this.#_n += 1;
+        
     }
 
     updateGameWindow() {
@@ -87,8 +88,15 @@ export class Game {
         if (!this.skier.isMoving) {
             return;
         }
-        
+
+        this.#_n += 1;
+        const distance = Math.round(this.#_n / 5);
+        this.statsBoard.setDistance(distance);
+        this.statsBoard.setSpeed(this.skier.speed);
+        this.statsBoard.setStyle(this.skier.style);
         this.skier.move();
+
+        
 
         const previousGameWindow = this.#_gameWindow;
 
