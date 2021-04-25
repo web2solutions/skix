@@ -7,7 +7,7 @@
     "dev": "webpack serve --mode development",
     "webpack": "webpack --mode development",
     "doc": "npx jsdoc -c ./jsDoc.json -t ./node_modules/ink-docstrap/template -R ./docs/README.md",
-    "build": "npm run lint && npm run rm && npm run doc && npm run webpack",
+    "build": "npm run test && npm run lint && npm run rm && npm run doc && npm run webpack",
     "rm": "rm -rf ./dist && mkdir dist/ && mkdir dist/css && mkdir dist/img && cp -a html_app/. dist  && cp -a css/. dist/css  && cp -a img/. dist/img",
     "lint": "eslint src --ext .js",
     "test": "npm run lint && npm run cy:run",

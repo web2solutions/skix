@@ -96,7 +96,6 @@ export class Game {
         // if is there a hit, then pause updateGameWindow
         const isHit = this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
         if (isHit) {
-            console.log(isHit)
             if (isHit._assetName === 'jumpRamp') {
                 
             } else {
