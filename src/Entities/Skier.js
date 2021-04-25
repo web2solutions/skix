@@ -6,7 +6,11 @@ export class Skier extends Entity {
     
     #_direction = Constants.SKIER_DIRECTIONS.DOWN;
     #_speed = Constants.SKIER_STARTING_SPEED;
-
+    #_isJumping = false;
+    #_stepUp = 0;
+    #_positionBeforeJump = null;
+    #_directionBeforeJump = null;
+    #_jumpingTimeOut
     constructor(x, y, _game) {
         super(x, y);
         this.game = _game;
@@ -19,7 +23,17 @@ export class Skier extends Entity {
         this.updateAsset();
     }
 
-    
+    get isMoving() {
+        return (this.direction === 2 || this.direction === 3 || this.direction === 4);
+    }
+
+    get isIdle() {
+        return (this.direction === 1 || this.direction === 5);
+    }
+
+    get isJumping() {
+        return this.#_isJumping;
+    }
 
     get direction() {
         return this.#_direction;
@@ -32,7 +46,6 @@ export class Skier extends Entity {
     }
 
     updateAsset() {
-        // console.log('------------< updateAsset')
         // console.log(this.direction, Constants.SKIER_DIRECTION_ASSET)
         this.assetName = Constants.SKIER_DIRECTION_ASSET[this.direction];
     }
@@ -128,7 +141,46 @@ export class Skier extends Entity {
     }
 
     turnDown() {
+        this.#_isJumping = false;
+        console.log('turnDown');
+        console.log('this.#_isJumping', this.#_isJumping)
         this.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
+    }
+
+    jump() {
+        this.#_stepUp += 1;
+
+        if (this.#_stepUp === 1) {
+            this.#_isJumping = true;
+            this.#_positionBeforeJump = this.y;
+            this.#_directionBeforeJump = this.direction;
+        }
+        
+        this.y -= 5;
+        this.setDirection(Constants.SKIER_DIRECTIONS[`JUMP${this.#_stepUp}`]);
+        
+        if (this.#_stepUp === 5) {
+            this.#_stepUp = 0;
+            if (
+                this.#_directionBeforeJump === Constants.SKIER_DIRECTIONS.LEFT
+                || this.#_directionBeforeJump === Constants.SKIER_DIRECTIONS.RIGHT
+            ) {
+                this.y = this.#_positionBeforeJump;
+                this.#_isJumping = false;
+            } else {
+                this.#_speed = Constants.SKIER_DOUBLE_SPEED;
+                this.y = this.#_positionBeforeJump + 100;
+                this.#_jumpingTimeOut = setTimeout(() => {
+                    this.#_speed = Constants.SKIER_STARTING_SPEED;
+                    this.#_isJumping = false;
+                }, Constants.SKIER_DOUBLE_SPEED_TIMER);
+            }
+
+            this.setDirection(this.#_directionBeforeJump);
+            this.#_positionBeforeJump = 0;
+        } else {
+            requestAnimationFrame(this.jump.bind(this));
+        }
     }
 
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
@@ -158,9 +210,20 @@ export class Skier extends Entity {
         
         
         if (collision) {
-            // console.warn('========> collision', collision);
+            console.warn('========> collision', collision);
             // console.warn(obstacleManager, assetManager);
             // console.warn(asset);
+            // {x: -15, y: 2296, _assetName: "jumpRamp"}
+            // isJumping
+            if (collision._assetName === 'jumpRamp') {
+                this.jump();
+                // this.turnDown();
+                return false;
+            } else if(collision._assetName === 'rock1' || collision._assetName === 'rock1' ) {
+                if (this.#_isJumping) {
+                    return false;
+                }
+            }
             this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
             // console.warn('========> end collision', collision);
             // change
