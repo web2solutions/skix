@@ -20,7 +20,10 @@ export class ObstacleManager {
     }
 
     placeInitialObstacles() {
-        const numberObstacles = Math.ceil((this.window.innerWidth / Constants.STARTING_OBSTACLE_REDUCER) * (this.window.innerHeight / Constants.STARTING_OBSTACLE_REDUCER));
+        const numberObstacles = Math.ceil(
+            (this.window.innerWidth / Constants.STARTING_OBSTACLE_REDUCER)
+            * (this.window.innerHeight / Constants.STARTING_OBSTACLE_REDUCER)
+        );
 
         const minX = -this.window.innerWidth / 2;
         const maxX = this.window.innerWidth / 2;
@@ -41,20 +44,27 @@ export class ObstacleManager {
         if(shouldPlaceObstacle !== Constants.NEW_OBSTACLE_CHANCE) {
             return;
         }
-
-        if(gameWindow.left < previousGameWindow.left) {
-            this.placeObstacleLeft(gameWindow);
-        }
-        else if(gameWindow.left > previousGameWindow.left) {
-            this.placeObstacleRight(gameWindow);
-        }
-
-        if(gameWindow.top < previousGameWindow.top) {
-            this.placeObstacleTop(gameWindow);
-        }
-        else if(gameWindow.top > previousGameWindow.top) {
+        
+        // bug
+        // previousGameWindow is null in first run
+        if (previousGameWindow) {
+            if(gameWindow.left < previousGameWindow.left) {
+                this.placeObstacleLeft(gameWindow);
+            }
+            else if(gameWindow.left > previousGameWindow.left) {
+                this.placeObstacleRight(gameWindow);
+            }
+    
+            if(gameWindow.top < previousGameWindow.top) {
+                this.placeObstacleTop(gameWindow);
+            }
+            else if(gameWindow.top > previousGameWindow.top) {
+                this.placeObstacleBottom(gameWindow);
+            }
+        } else {
             this.placeObstacleBottom(gameWindow);
         }
+        
     };
 
     placeObstacleLeft(gameWindow) {
@@ -76,7 +86,7 @@ export class ObstacleManager {
     placeRandomObstacle(minX, maxX, minY, maxY) {
         const position = this.calculateOpenPosition(minX, maxX, minY, maxY);
         const newObstacle = new Obstacle(position.x, position.y);
-
+        
         this.obstacles.push(newObstacle);
     }
 
