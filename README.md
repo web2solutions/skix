@@ -7,7 +7,7 @@ This project is a fork from [Ceros Ski Code Challenge](https://github.com/tobbie
 
 [Doc](https://web2solutions.github.io/skix/code)
 
-[Demo](https://skix.vercel.app/)
+[Play online - Demo](https://skix.vercel.app/)
 
 ```bash
 npm install
