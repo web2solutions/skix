@@ -7,7 +7,7 @@ const config = {
     // this is under development until it has no bugs
     mode: 'development',
 
-    entry: [/*'babel-polyfill', */'./src/index.js'],
+    entry: [ /*'babel-polyfill', */ './src/index.js'],
 
     output: {
         path: path.resolve(__dirname, './dist'),
@@ -15,21 +15,16 @@ const config = {
     },
 
     module: {
-        rules : [
-            {
+        rules: [{
                 test: /\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
                 use: {
-                  loader: 'babel-loader',
-                  options: {
-                    presets: ['@babel/preset-env']
-                  }
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
                 }
-              },
-              {
-                test: /\.css$/i,
-                use: ['style-loader', 'css-loader'],
-              },
+            },
             {
                 test: /\.png$/,
                 use: ['file-loader'],

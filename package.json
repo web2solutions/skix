@@ -8,7 +8,7 @@
     "webpack": "webpack --mode development",
     "doc": "npx jsdoc -c ./jsDoc.json -t ./node_modules/ink-docstrap/template -R ./docs/README.md",
     "build": "npm run test && npm run lint && npm run rm && npm run doc && npm run webpack",
-    "rm": "rm -rf ./dist && mkdir dist/ && mkdir dist/css && mkdir dist/img && cp -a html_app/. dist  && cp -a css/. dist/css  && cp -a img/. dist/img",
+    "rm": "rm -rf ./dist && mkdir dist/ && mkdir dist/img && cp -a html_app/. dist && cp -a img/. dist/img",
     "lint": "eslint src --ext .js",
     "test": "npm run lint && npm run cy:run",
     "cy:run": "cypress run --spec \"cypress/integration/*\"",
@@ -26,7 +26,7 @@
   "contributors": [
     "Dan Wash"
   ],
-  "license": "",
+  "license": "MIT",
   "homepage": "https://github.com/web2solutions/skix#readme",
   "devDependencies": {
     "@babel/cli": "^7.12.10",
@@ -57,7 +57,6 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "core-js": "^2.6.12",
-    "css-loader": "^2.1.1",
     "cypress": "^7.1.0",
     "style-loader": "^0.23.1"
   },
