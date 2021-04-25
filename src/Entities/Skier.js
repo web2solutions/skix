@@ -41,12 +41,10 @@ export class Skier extends Entity {
 
     // change
     set direction(direction) {
-        // console.info('set direction', direction)
         this.#_direction = direction;
     }
 
     updateAsset() {
-        // console.log(this.direction, Constants.SKIER_DIRECTION_ASSET)
         this.assetName = Constants.SKIER_DIRECTION_ASSET[this.direction];
     }
 
@@ -118,7 +116,6 @@ export class Skier extends Entity {
 
     // change
     getTurnLeftX(name) {
-        // console.log(name, Constants.OBSTACLE_SIZE);
         if (Constants.OBSTACLE_SIZE[name]) {
             return (Constants.OBSTACLE_SIZE[name] / 2) + 5;
         }
@@ -142,8 +139,6 @@ export class Skier extends Entity {
 
     turnDown() {
         this.#_isJumping = false;
-        console.log('turnDown');
-        console.log('this.#_isJumping', this.#_isJumping)
         this.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
     }
 
@@ -184,8 +179,7 @@ export class Skier extends Entity {
     }
 
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
-        // console.log(obstacleManager, assetManager);
-        // console.log('this.assetName', this.assetName);
+
         const asset = assetManager.getAsset(this.assetName);
         
         const skierBounds = new Rect(
@@ -210,14 +204,8 @@ export class Skier extends Entity {
         
         
         if (collision) {
-            console.warn('========> collision', collision);
-            // console.warn(obstacleManager, assetManager);
-            // console.warn(asset);
-            // {x: -15, y: 2296, _assetName: "jumpRamp"}
-            // isJumping
             if (collision._assetName === 'jumpRamp') {
                 this.jump();
-                // this.turnDown();
                 return false;
             } else if(collision._assetName === 'rock1' || collision._assetName === 'rock1' ) {
                 if (this.#_isJumping) {
@@ -225,9 +213,6 @@ export class Skier extends Entity {
                 }
             }
             this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
-            // console.warn('========> end collision', collision);
-            // change
-            // debug pause
             return collision;
         }
 

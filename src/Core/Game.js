@@ -39,7 +39,6 @@ export class Game {
     }
 
     init() {
-        console.warn('-------> init')
         this.obstacleManager.placeInitialObstacles();
     }
 
@@ -64,20 +63,17 @@ export class Game {
     }
 
     async load() {
-        console.warn('-------> load')
         await this.assetManager.loadAssets(Constants.ASSETS);
     }
 
     run() {
-        
-        // console.log('-----> run');
         this.canvas.clearCanvas();
 
         this.updateGameWindow();
         this.drawGameWindow();
 
         requestAnimationFrame(this.run.bind(this));
-        this.#_n += 1
+        this.#_n += 1;
     }
 
     updateGameWindow() {
