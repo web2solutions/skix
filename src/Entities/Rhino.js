@@ -1,17 +1,11 @@
 import * as Constants from "../Constants";
 import { Entity } from "./Entity";
 import { intersectTwoRects, Rect } from "../Core/Utils";
-
 export class Rhino extends Entity {
     
     #_direction = Constants.RHINO_DIRECTIONS.RUN_LEFT;
     #_speed = Constants.RHINO_STARTING_SPEED;
-    #_isJumping = false;
-    #_stepUp = 0;
-    #_positionBeforeJump = null;
-    #_directionBeforeJump = null;
-    #_jumpingTimeOut = null;
-    #_style = 0;
+
     constructor(x, y, _game) {
         super(x, y);
         this.game = _game;
@@ -35,25 +29,6 @@ export class Rhino extends Entity {
         requestAnimationFrame(this.run.bind(this));
     }
 
-    get isMoving() {
-        return (this.direction === 2 || this.direction === 3 || this.direction === 4);
-    }
-
-    get isIdle() {
-        return (this.direction === 1 || this.direction === 5);
-    }
-
-    get speed() {
-        return this.#_speed;
-    }
-
-    get style() {
-        return this.#_style;
-    }
-
-    get isJumping() {
-        return this.#_isJumping;
-    }
 
     get direction() {
         return this.#_direction;
@@ -99,7 +74,6 @@ export class Rhino extends Entity {
     moveRhinoLeftDown() {
         this.x -= this.#_speed / Constants.RHINO_DIAGONAL_SPEED_REDUCER;
         this.y += this.#_speed / Constants.RHINO_DIAGONAL_SPEED_REDUCER;
-        this.#_style += 1;
     }
 
     moveRhinoDown() {
@@ -109,7 +83,6 @@ export class Rhino extends Entity {
     moveRhinoRightDown() {
         this.x += this.#_speed / Constants.RHINO_DIAGONAL_SPEED_REDUCER;
         this.y += this.#_speed / Constants.RHINO_DIAGONAL_SPEED_REDUCER;
-        this.#_style += 1;
     }
 
     moveRhinoRight() {
@@ -168,48 +141,10 @@ export class Rhino extends Entity {
     }
 
     turnDown() {
-        this.#_isJumping = false;
         this.setDirection(Constants.RHINO_DIRECTIONS.DOWN);
     }
 
-    jump() {
-        this.#_stepUp += 1;
-
-        if (this.#_stepUp === 1) {
-            this.#_isJumping = true;
-            this.#_positionBeforeJump = this.y;
-            this.#_directionBeforeJump = this.direction;
-        }
-        
-        this.y -= 5;
-        this.setDirection(Constants.RHINO_DIRECTIONS[`JUMP${this.#_stepUp}`]);
-        
-        if (this.#_stepUp === 5) {
-            this.#_stepUp = 0;
-            if (
-                this.#_directionBeforeJump === Constants.RHINO_DIRECTIONS.LEFT
-                || this.#_directionBeforeJump === Constants.RHINO_DIRECTIONS.RIGHT
-            ) {
-                this.y = this.#_positionBeforeJump;
-                this.#_isJumping = false;
-            } else {
-                this.#_speed = Constants.RHINO_DOUBLE_SPEED;
-                this.y = this.#_positionBeforeJump + 100;
-                this.#_jumpingTimeOut = setTimeout(() => {
-                    this.#_speed = Constants.RHINO_STARTING_SPEED;
-                    this.#_isJumping = false;
-                }, Constants.RHINO_DOUBLE_SPEED_TIMER);
-            }
-            this.#_style += 5;
-            this.setDirection(this.#_directionBeforeJump);
-            this.#_positionBeforeJump = 0;
-        } else {
-            requestAnimationFrame(this.jump.bind(this));
-        }
-    }
-
     checkIfRhinoHitObstacle(obstacleManager, assetManager) {
-
         const asset = assetManager.getAsset(this.assetName);
         
         const rhinoBounds = new Rect(
@@ -234,16 +169,6 @@ export class Rhino extends Entity {
         
         
         if (collision) {
-            if (collision._assetName === 'jumpRamp') {
-                this.jump();
-                return false;
-            } else if(collision._assetName === 'rock1' || collision._assetName === 'rock1' ) {
-                if (this.#_isJumping) {
-                    return false;
-                }
-            }
-            this.game.statsBoard.setSpeed(0);
-            this.#_style -= 5;
             this.setDirection(Constants.RHINO_DIRECTIONS.CRASH);
             return collision;
         }
