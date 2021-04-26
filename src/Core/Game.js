@@ -4,6 +4,7 @@ import { wrapperStyle } from './Styles';
 import { AssetManager } from "./AssetManager";
 import { Canvas } from './Canvas';
 import { Skier } from "../Entities/Skier";
+import { Rhino } from "../Entities/Rhino";
 import { StatsBoard } from './StatsBoard';
 import { ObstacleManager } from "../Entities/Obstacles/ObstacleManager";
 import { Rect } from './Utils';
@@ -32,6 +33,8 @@ export class Game {
         this.assetManager = new AssetManager();
         this.canvas = new Canvas(this.window.innerWidth, this.window.innerHeight, this.window);
         this.skier = new Skier(0, 0, this);
+
+        this.rhino = new Rhino(this.window.innerWidth / 2, 0, this);
         this.statsBoard = new StatsBoard(this.window);
         this.obstacleManager = new ObstacleManager(this.window);
 
@@ -94,7 +97,10 @@ export class Game {
         this.statsBoard.setDistance(distance);
         this.statsBoard.setSpeed(this.skier.speed);
         this.statsBoard.setStyle(this.skier.style);
+        
         this.skier.move();
+
+        this.rhino.move();
 
         
 
@@ -119,10 +125,12 @@ export class Game {
     }
 
     drawGameWindow() {
-
         this.canvas.setDrawOffset(this.#_gameWindow.left, this.#_gameWindow.top);
 
         this.skier.draw(this.canvas, this.assetManager);
+        
+        this.rhino.draw(this.canvas, this.assetManager);
+        
         this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
     }
 
