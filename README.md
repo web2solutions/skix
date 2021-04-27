@@ -45,8 +45,18 @@ There was a bug when starting the game and imediately calling ObstacleManager.pl
 `Skier`: The property `Skier.assetName` is moved to `Entity` class to be able to be used by any class extending the Entity class.
 `Game`: 
 
+5. FEATURE
 
-5. TESTING
+- The skier is now able to jump when pressing the `shift` key. 
+- It original speed is incresed to two times. When jumping the skier does not get crashed if it hit any `rock` obstacle.
+
+
+6. FEATURE 
+
+- The `Ramp Jump` obstacle  is now implemented.
+- When hitting the `ramp jump` the skier behaves like it's jumping.
+
+6. TESTING
 
 - Deprecated Jest in favor of Cypress to get a real browser environment to test the game. Jest setup would need at least one addon to deal with canvas and you still does not have a real browser environment. This change is now allowing `visual testing`.
 - Written unit tests to cover initial reported issue.
@@ -56,6 +66,6 @@ There was a bug when starting the game and imediately calling ObstacleManager.pl
 
 <img src="https://i.imgur.com/ZgboCuV.png" width="400">
 
-<img src="https://i.imgur.com/ZgboCuV.png" width="400">
+<img src="https://i.imgur.com/oCZSccG.png" width="400">
 
 <img src="https://i.imgur.com/7y4VIaj.png" width="400">
