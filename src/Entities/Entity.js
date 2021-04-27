@@ -22,9 +22,6 @@ export class Entity {
 
     // change
     set assetName(name) {
-        if (typeof name !== 'string') {
-            throw new Error('Skier asset name must be a string');
-        }
         this._assetName = name;
     }
 
@@ -36,6 +33,9 @@ export class Entity {
     }
 
     draw(canvas, assetManager) {
+        if (this.assetName === '') {
+            return;
+        }
         const asset = assetManager.getAsset(this.assetName);
         const drawX = this.x - asset.width / 2;
         const drawY = this.y - asset.height / 2;

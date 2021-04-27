@@ -43,7 +43,6 @@ export class StatsBoard {
         const min = Math.round(seconds / 60);
         const hour = Math.round(min / 60);
         this.#_timeDisplay.innerText = `Time: ${hour}:${min}:${seconds}`;
-        requestAnimationFrame(this.setTime.bind(this));
     }
 
     renderDistanceDisplay() {

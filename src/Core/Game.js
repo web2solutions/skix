@@ -17,12 +17,15 @@ import { Rect } from './Utils';
 export class Game {
     #_gameWindow = null;
 
+
     // change
     // pause UpdateGameWindow
-    #_pause = false
-    #_obstacle = null
+    #_pause = false;
+    #_obstacle = null;
 
-    #_n = 0
+    #_end = false;
+    #_n = 0;
+    #_isEating = false;
 
     constructor(win) {
        
@@ -80,19 +83,41 @@ export class Game {
         
     }
 
+    setGameOver() {
+        this.#_isEating = false;
+        this.#_end = true;
+    }
+
+    get gameOver() {
+        return this.#_end;
+    }
+
     updateGameWindow() {
         
-        // change
+        if (this.#_end) {
+            return;
+        }
+        
         // if is there a hit, then pause updateGameWindow
         if (this.pause) {
             return;
         }
 
-        if (!this.skier.isMoving) {
+
+        if (this.#_isEating) {
             return;
         }
 
+        /* if (!this.skier.isMoving) {
+            return;
+        } */
+
+        this.statsBoard.setTime();
+
+        const previousGameWindow = this.#_gameWindow;
+
         this.#_n += 1;
+        
         const distance = Math.round(this.#_n / 5);
         this.statsBoard.setDistance(distance);
         this.statsBoard.setSpeed(this.skier.speed);
@@ -101,10 +126,6 @@ export class Game {
         this.skier.move();
 
         this.rhino.move();
-
-        
-
-        const previousGameWindow = this.#_gameWindow;
 
         this.calculateGameWindow();
 
@@ -118,10 +139,14 @@ export class Game {
                 
             } else {
                 this.obstacle = isHit;
-                this.pause = true;
             }
         }
         
+        const isEating = this.rhino.checkIfRhinoHitSkier(this.assetManager);
+        if (isEating) {
+            this.skier.assetName = '';
+            this.#_isEating = true;
+        }
     }
 
     drawGameWindow() {
@@ -152,6 +177,12 @@ export class Game {
     }
 
     handleKeyDown(event) {
+        if (this.#_isEating) {
+            return;
+        }
+        if (this.#_end) {
+            return;
+        }
         switch(event.which) {
             case Constants.KEYS.LEFT:
                 if (this.pause) { 

@@ -5,22 +5,27 @@ export class Rhino extends Entity {
     
     #_direction = Constants.RHINO_DIRECTIONS.RUN_LEFT;
     #_speed = Constants.RHINO_STARTING_SPEED;
+    #_eating = false;
 
     constructor(x, y, _game) {
         super(x, y);
         this.game = _game;
 
         this.assetName = Constants.RHINO_DEFAULT;
-
+    
         this.run();
     }
 
     setDirection(direction) {
+        
         this.direction = direction;
         this.updateAsset();
     }
 
     run() {
+        if (this.#_eating) {
+            return;
+        }
         if (this.direction === Constants.RHINO_DIRECTIONS.RUN_LEFT) {
             this.setDirection(Constants.RHINO_DIRECTIONS.RUN_LEFT_2);
         } else {
@@ -28,7 +33,6 @@ export class Rhino extends Entity {
         }
         requestAnimationFrame(this.run.bind(this));
     }
-
 
     get direction() {
         return this.#_direction;
@@ -41,6 +45,42 @@ export class Rhino extends Entity {
 
     updateAsset() {
         this.assetName = Constants.RHINO_DIRECTION_ASSET[this.direction];
+    }
+
+    eat(step = null) {
+        if (this.game.gameOver) {
+            return;
+        }
+        let _step = null;
+        if (!step) {
+            this.setDirection(Constants.RHINO_DIRECTIONS.RHINO_LIFT);
+            _step = Constants.RHINO_DIRECTIONS.RHINO_LIFT_MOUTH_OPEN;
+        } else {
+            this.setDirection(step);
+            switch (step) {
+                case Constants.RHINO_DIRECTIONS.RHINO_LIFT_MOUTH_OPEN:
+                    _step = Constants.RHINO_DIRECTIONS.RHINO_LIFT_EAT_1;
+                    break;
+                case Constants.RHINO_DIRECTIONS.RHINO_LIFT_EAT_1:
+                    _step = Constants.RHINO_DIRECTIONS.RHINO_LIFT_EAT_2;
+                    break;
+                case Constants.RHINO_DIRECTIONS.RHINO_LIFT_EAT_2:
+                    _step = Constants.RHINO_DIRECTIONS.RHINO_LIFT_EAT_3;
+                    break;
+                case Constants.RHINO_DIRECTIONS.RHINO_LIFT_EAT_3:
+                    _step = Constants.RHINO_DIRECTIONS.RHINO_LIFT_EAT_4;
+                    break;
+                default:
+                    this.end = true;
+                    this.game.setGameOver();
+                    _step = Constants.RHINO_DIRECTIONS.RHINO_LIFT_EAT_4;
+                    break;
+            }
+        }
+        setInterval(() => {
+            requestAnimationFrame(this.eat.bind(this, _step));
+        }, 200);
+        
     }
 
     move() {
@@ -63,88 +103,25 @@ export class Rhino extends Entity {
     moveRhinoLeft() {
         this.x -= Constants.RHINO_STARTING_SPEED;
         // console.log(this.x)
-        const lim = (this.game.window.innerWidth / 2) * (-1);
-        if (this.x <= lim) {
+        const { x, y } = this.game.skier.getPosition();
+        
+        if (this.x <= x) {
             // console.warn('reset', this.game.window.innerWidth)
             this.x = this.game.window.innerWidth / 2;
         }
-        this.y += this.#_speed;
+        this.y = y;
     }
 
-    moveRhinoLeftDown() {
-        this.x -= this.#_speed / Constants.RHINO_DIAGONAL_SPEED_REDUCER;
-        this.y += this.#_speed / Constants.RHINO_DIAGONAL_SPEED_REDUCER;
-    }
 
     moveRhinoDown() {
         this.y += this.#_speed;
-    }
-
-    moveRhinoRightDown() {
-        this.x += this.#_speed / Constants.RHINO_DIAGONAL_SPEED_REDUCER;
-        this.y += this.#_speed / Constants.RHINO_DIAGONAL_SPEED_REDUCER;
-    }
-
-    moveRhinoRight() {
-        this.x += Constants.RHINO_STARTING_SPEED;
     }
 
     moveRhinoUp() {
         this.y -= Constants.RHINO_STARTING_SPEED;
     }
 
-    // change
-    turnLeft() {
-        if(this.direction === Constants.RHINO_DIRECTIONS.LEFT) {
-            this.moveRhinoLeft();
-        }
-        else {
-            if (this.direction === 0) {
-                
-                // set face to left
-                this.setDirection(1);
-                
-                const x = this.getTurnLeftX(this.game.obstacle.assetName);
-
-                // place left after the obstacle
-                this.x = this.game.obstacle.x - x;
-
-                this.game.resetObstacle();
-            } else {
-                this.setDirection(this.direction - 1);
-            }
-            
-        }
-    }
-
-    // change
-    getTurnLeftX(name) {
-        if (Constants.OBSTACLE_SIZE[name]) {
-            return (Constants.OBSTACLE_SIZE[name] / 2) + 5;
-        }
-        return 0;
-    }
-
-    turnRight() {
-        if(this.direction === Constants.RHINO_DIRECTIONS.RIGHT) {
-            this.moveRhinoRight();
-        }
-        else {
-            this.setDirection(this.direction + 1);
-        }
-    }
-
-    turnUp() {
-        if(this.direction === Constants.RHINO_DIRECTIONS.LEFT || this.direction === Constants.RHINO_DIRECTIONS.RIGHT) {
-            this.moveRhinoUp();
-        }
-    }
-
-    turnDown() {
-        this.setDirection(Constants.RHINO_DIRECTIONS.DOWN);
-    }
-
-    checkIfRhinoHitObstacle(obstacleManager, assetManager) {
+    checkIfRhinoHitSkier(assetManager) {
         const asset = assetManager.getAsset(this.assetName);
         
         const rhinoBounds = new Rect(
@@ -154,25 +131,32 @@ export class Rhino extends Entity {
             this.y - asset.height / 4
         );
 
-        const collision = obstacleManager.getObstacles().find((obstacle) => {
-            const obstacleAsset = assetManager.getAsset(obstacle.getAssetName());
-            const obstaclePosition = obstacle.getPosition();
-            const obstacleBounds = new Rect(
-                obstaclePosition.x - obstacleAsset.width / 2,
-                obstaclePosition.y - obstacleAsset.height / 2,
-                obstaclePosition.x + obstacleAsset.width / 2,
-                obstaclePosition.y
-            );
-
-            return intersectTwoRects(rhinoBounds, obstacleBounds);
-        });
+        // skier
+        const skierAsset = assetManager.getAsset(this.game.skier.assetName);
+        const skierPosition = this.game.skier.getPosition();
+        const skierBounds = new Rect(
+            skierPosition.x - skierAsset.width / 2,
+            skierPosition.y - skierAsset.height / 2,
+            skierPosition.x + skierAsset.width / 2,
+            skierPosition.y
+        );
+        const collision = intersectTwoRects(rhinoBounds, skierBounds);
         
         
         if (collision) {
-            this.setDirection(Constants.RHINO_DIRECTIONS.CRASH);
+            this.eat();
+            this.#_eating = true;
             return collision;
         }
 
         return false;
     };
+
+    draw(canvas, assetManager) {
+        const asset = assetManager.getAsset(this.assetName);
+        const drawX = this.x - asset.width;
+        const drawY = this.y - asset.height;
+
+        canvas.drawImage(asset, drawX, drawY, 64, 65);
+    }
 }

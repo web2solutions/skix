@@ -22,23 +22,26 @@ This project is a answer to the following code challenge:
 
 ### Changes made after the fork:
 
-1. BUG FIX
 
-After get crashed when hitting an obstacle, the skier should be able to get and be facing to the left side up after pressing the `left arrow`.
-
-2. BUG FIX
-
-There was a bug when starting the game and imediately calling ObstacleManager.placeNewObstacle() method. There were no conditionals checking the value of the variable `previousGameWindow`.
-
-<img src="https://i.imgur.com/86R358e.png" width="400">
-
-3. BUILD IMPROVEMENTS
+1. PROJECT SETUP IMPROVEMENTS
 
 - The babel and wepack setup was update to use newer versions. Allowing, for example, the usage of private resources inside Classes. 
 - Security issues related to modules being used is also now solved.
 - Added source maps to improve debugging.
 - Added Eslint to enforce best pratices and code quality.
 - jsDoc setup to generate documentation based on comments from source files.
+
+2. BUG FIX
+
+After get crashed when hitting an obstacle, the skier should be able to get and be facing to the left side up after pressing the `left arrow`.
+
+3. BUG FIX
+
+There was a bug when starting the game and imediately calling ObstacleManager.placeNewObstacle() method. There were no conditionals checking the value of the variable `previousGameWindow`.
+
+<img src="https://i.imgur.com/86R358e.png" width="400">
+
+
 
 4. Refactor
 
@@ -69,3 +72,15 @@ There was a bug when starting the game and imediately calling ObstacleManager.pl
 <img src="https://i.imgur.com/oCZSccG.png" width="400">
 
 <img src="https://i.imgur.com/7y4VIaj.png" width="400">
+
+7. REFACTOR
+
+The image assets were encoded into base64 strings and stored as js modules and now are they are built and loaded together with the `main` and `unique` `bundle file`.
+
+This is a change which improves the game loading and make it easiest to update any asset
+
+8. FEATURE
+
+The  rhino is up and hungry!
+
+- Rhino runs from right to left based in skier currently position

@@ -28,10 +28,6 @@ export class Skier extends Entity {
         return (this.direction === 2 || this.direction === 3 || this.direction === 4);
     }
 
-    get isIdle() {
-        return (this.direction === 1 || this.direction === 5);
-    }
-
     get speed() {
         return this.#_speed;
     }
