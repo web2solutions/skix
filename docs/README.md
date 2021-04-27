@@ -101,3 +101,14 @@ This is a change which improves the game loading and make it easiest to update a
 The  rhino is up and hungry!
 
 - Rhino runs from right to left based in skier currently position
+
+
+9. `FEATURE`
+
+Game Stats Panel
+
+- Display time
+- Display distance
+- Display speed
+- Display style
+
