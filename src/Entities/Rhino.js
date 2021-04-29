@@ -8,7 +8,7 @@ export class Rhino extends Entity {
     #_speed = 0;
     
     get speed() {
-        this.#_speed;
+        return this.#_speed;
     }
 
     constructor(x, y, _game) {

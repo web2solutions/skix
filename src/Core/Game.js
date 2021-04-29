@@ -142,12 +142,13 @@ export class Game {
         this.statsBoard.setStyle(this.skier.style);
         
         this.skier.move();
-        
-        const timeNow = (new Date()).getTime();
-        console.log(Math.round((timeNow - this.statsBoard.startTime) / 1000));
-        // if()
 
-        // this.rhino.move();
+        const timeNow = (new Date()).getTime();
+        const timeDiffer = (timeNow - this.statsBoard.startTime) / 1000;
+        if (timeDiffer > 30) {
+            this.rhino.move();    
+        }
+        
 
         this.calculateGameWindow();
 
@@ -165,13 +166,11 @@ export class Game {
             }
         }
         
-        if (this.rhino) {
-            const isEating = this.rhino.checkIfRhinoHitSkier(this.assetManager);
+        const isEating = this.rhino.checkIfRhinoHitSkier(this.assetManager);
             if (isEating) {
                 this.skier.assetName = '';
                 this.#_isEating = true;
             }
-        }
         
     }
 
@@ -179,9 +178,7 @@ export class Game {
         this.canvas.setDrawOffset(this.#_gameWindow.left, this.#_gameWindow.top);
 
         this.skier.draw(this.canvas, this.assetManager);
-        if (this.rhino) {
-            this.rhino.draw(this.canvas, this.assetManager);    
-        }
+        this.rhino.draw(this.canvas, this.assetManager);    
         
         
         this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
