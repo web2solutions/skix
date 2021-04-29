@@ -63,13 +63,13 @@ export const RHINO_LIFT = 'rhinoLift';
 export const RHINO_RUN_LEFT = 'rhinoRunLeft';
 export const RHINO_RUN_LEFT_2 = 'rhinoRunLeft2';
 
-export const RHINO_STARTING_SPEED = 5;
-export const RHINO_DOUBLE_SPEED = RHINO_STARTING_SPEED * 2;
+// export const RHINO_STARTING_SPEED = 5;
+// export const RHINO_DOUBLE_SPEED = RHINO_STARTING_SPEED * 2;
 export const RHINO_DIAGONAL_SPEED_REDUCER = 1.4142;
 export const RHINO_DOUBLE_SPEED_TIMER = 1000;
 
-export const SKIER_STARTING_SPEED = 5;
-export const SKIER_DOUBLE_SPEED = SKIER_STARTING_SPEED * 2;
+// export const SKIER_STARTING_SPEED = 5;
+// export const SKIER_DOUBLE_SPEED = SKIER_STARTING_SPEED * 2;
 export const SKIER_DIAGONAL_SPEED_REDUCER = 1.4142;
 export const SKIER_DOUBLE_SPEED_TIMER = 1000;
 
@@ -172,3 +172,8 @@ export const RHINO_DIRECTION_ASSET = {
     [RHINO_DIRECTIONS.RHINO_LIFT_MOUTH_OPEN] : RHINO_LIFT_MOUTH_OPEN,
     [RHINO_DIRECTIONS.RHINO_LIFT] : RHINO_LIFT
 };
+
+
+export const START_GAME_EASY = 'startGameEasy';
+export const START_GAME_HARD = 'startGameHard';
+export const CHECK_RANK = 'checkRank';

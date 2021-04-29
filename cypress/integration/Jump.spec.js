@@ -12,7 +12,7 @@ describe('#--- SkiFree Jump test suite', () => {
             // clear default cypress information
             win.document.body.innerHTML = '';
             // create a Game instance passing the runner window
-            skiGame = new Game(win);
+            skiGame = new Game({ win });
             // load the game assets
             skiGame.load().then(() => {
                 // init the game

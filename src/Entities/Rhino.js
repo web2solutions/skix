@@ -4,15 +4,21 @@ import { intersectTwoRects, Rect } from "../Core/Utils";
 export class Rhino extends Entity {
     
     #_direction = Constants.RHINO_DIRECTIONS.RUN_LEFT;
-    #_speed = Constants.RHINO_STARTING_SPEED;
     #_eating = false;
+    #_speed = 0;
+    
+    get speed() {
+        this.#_speed;
+    }
 
     constructor(x, y, _game) {
         super(x, y);
         this.game = _game;
 
         this.assetName = Constants.RHINO_DEFAULT;
-    
+        
+        this.#_speed = this.game.rhinoSpeed;
+
         this.run();
     }
 
@@ -101,7 +107,7 @@ export class Rhino extends Entity {
     }
 
     moveRhinoLeft() {
-        this.x -= Constants.RHINO_STARTING_SPEED;
+        this.x -= this.speed;
         // console.log(this.x)
         const { x, y } = this.game.skier.getPosition();
         
@@ -114,11 +120,11 @@ export class Rhino extends Entity {
 
 
     moveRhinoDown() {
-        this.y += this.#_speed;
+        this.y += this.speed;
     }
 
     moveRhinoUp() {
-        this.y -= Constants.RHINO_STARTING_SPEED;
+        this.y -= this.speed;
     }
 
     checkIfRhinoHitSkier(assetManager) {

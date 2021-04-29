@@ -5,27 +5,27 @@ import { intersectTwoRects, Rect } from "../Core/Utils";
 export class Skier extends Entity {
     
     #_direction = Constants.SKIER_DIRECTIONS.DOWN;
-    #_speed = Constants.SKIER_STARTING_SPEED;
+    #_speed = 0;
+    #_originalSpeed = 0;
     #_isJumping = false;
     #_stepUp = 0;
     #_positionBeforeJump = null;
     #_directionBeforeJump = null;
     #_jumpingTimeOut = null;
     #_style = 0;
-    constructor(x, y, _game) {
-        super(x, y);
-        this.game = _game;
-
-        this.assetName = Constants.SKIER_DOWN;
-    }
-
-    setDirection(direction) {
-        this.direction = direction;
-        this.updateAsset();
-    }
 
     get isMoving() {
-        return (this.direction === 2 || this.direction === 3 || this.direction === 4);
+        return (this.direction === Constants.SKIER_DIRECTIONS.LEFT_DOWN
+            || this.direction === Constants.SKIER_DIRECTIONS.DOWN
+            || this.direction === Constants.SKIER_DIRECTIONS.RIGHT_DOWN
+        );
+    }
+
+    get isIdle() {
+        return (
+            this.direction === Constants.SKIER_DIRECTIONS.LEFT
+            || this.direction === Constants.SKIER_DIRECTIONS.RIGHT
+        );
     }
 
     get speed() {
@@ -44,9 +44,23 @@ export class Skier extends Entity {
         return this.#_direction;
     }
 
-    // change
     set direction(direction) {
         this.#_direction = direction;
+    }
+
+    constructor(x, y, _game) {
+        super(x, y);
+        this.game = _game;
+
+        this.assetName = Constants.SKIER_DOWN;
+
+        this.#_speed = this.game.skierSpeed;
+        this.#_originalSpeed = this.game.skierSpeed;
+    }
+
+    setDirection(direction) {
+        this.direction = direction;
+        this.updateAsset();
     }
 
     updateAsset() {
@@ -70,7 +84,7 @@ export class Skier extends Entity {
     }
 
     moveSkierLeft() {
-        this.x -= Constants.SKIER_STARTING_SPEED;
+        this.x -= this.speed;
     }
 
     moveSkierLeftDown() {
@@ -90,11 +104,11 @@ export class Skier extends Entity {
     }
 
     moveSkierRight() {
-        this.x += Constants.SKIER_STARTING_SPEED;
+        this.x += this.speed;
     }
 
     moveSkierUp() {
-        this.y -= Constants.SKIER_STARTING_SPEED;
+        this.y -= this.speed;
     }
 
     // change
@@ -104,20 +118,15 @@ export class Skier extends Entity {
         }
         else {
             if (this.direction === 0) {
-                
                 // set face to left
                 this.setDirection(1);
-                
-                const x = this.getTurnLeftX(this.game.obstacle.assetName);
-
+                const after = this.getTurnLeftX(this.game.obstacle.assetName);
                 // place left after the obstacle
-                this.x = this.game.obstacle.x - x;
-
+                this.x = this.game.obstacle.x - after;
                 this.game.resetObstacle();
             } else {
                 this.setDirection(this.direction - 1);
             }
-            
         }
     }
 
@@ -170,10 +179,11 @@ export class Skier extends Entity {
                 this.y = this.#_positionBeforeJump;
                 this.#_isJumping = false;
             } else {
-                this.#_speed = Constants.SKIER_DOUBLE_SPEED;
+                this.#_speed = (this.speed * 2);
+                
                 this.y = this.#_positionBeforeJump + 100;
                 this.#_jumpingTimeOut = setTimeout(() => {
-                    this.#_speed = Constants.SKIER_STARTING_SPEED;
+                    this.#_speed = this.#_originalSpeed;
                     this.#_isJumping = false;
                 }, Constants.SKIER_DOUBLE_SPEED_TIMER);
             }

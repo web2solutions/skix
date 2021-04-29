@@ -112,3 +112,8 @@ Game Stats Panel
 - Display speed
 - Display style
 
+
+10. `FEATURE`
+
+Game console. The game console is the welcome screen allowing the player to select the game mode to start or check the game rank.
+

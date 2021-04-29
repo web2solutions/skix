@@ -1,9 +1,6 @@
-import { Game } from './Core/Game.js';
+import { GameConsole } from './Core/GameConsole';
 
 document.addEventListener("DOMContentLoaded",() => {
-    const skiGame = new Game();
-    skiGame.load().then(() => {
-        skiGame.init();
-        skiGame.run();
-    });
+    const gameConsole = new GameConsole();
+    gameConsole.renderWelcome();
 });

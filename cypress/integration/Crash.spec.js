@@ -12,7 +12,7 @@ describe('#--- SkiFree Crash test suite', () => {
             // clear default cypress information
             win.document.body.innerHTML = '';
             // create a Game instance passing the runner window
-            skiGame = new Game(win);
+            skiGame = new Game({ win });
             // load the game assets
             skiGame.load().then(() => {
                 // init the game
@@ -25,12 +25,12 @@ describe('#--- SkiFree Crash test suite', () => {
 
     describe('Crash bug must be solved', () => {
         it('Start game and wait until the skier chashes', () => {
-            cy.wrap(skiGame).should('have.property', 'pause', true);
+            cy.wrap(skiGame).should('have.property', 'crashed', true);
         });
 
         it('press left arrow after skier get crashed must get the skier UP facing to left side', () => {
             skiGame.triggerKeyDown(Constants.KEYS.LEFT);
-            cy.wrap(skiGame).should('have.property', 'pause', false);
+            cy.wrap(skiGame).should('have.property', 'crashed', false);
         });
     });
 });

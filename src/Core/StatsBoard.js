@@ -15,6 +15,10 @@ export class StatsBoard {
 
     #_style = 0;
 
+    get startTime() {
+        return this.#_timeStart;
+    }
+
     constructor(win) {
         this.#_win = win;
         this.#_board = this.#_win.document.createElement('ul');

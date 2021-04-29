@@ -17,40 +17,38 @@ import { Rect } from './Utils';
 export class Game {
     #_gameWindow = null;
 
-
     // change
     // pause UpdateGameWindow
     #_pause = false;
     #_obstacle = null;
+    #_crashed = false;
 
     #_end = false;
     #_n = 0;
     #_isEating = false;
 
-    constructor(win) {
-       
-        this.window = win || window;
-        this.dom = this.window.document;
-        this.dom.body.style = wrapperStyle;
-       
-        this.assetManager = new AssetManager();
-        this.canvas = new Canvas(this.window.innerWidth, this.window.innerHeight, this.window);
-        this.skier = new Skier(0, 0, this);
-
-        this.rhino = new Rhino(this.window.innerWidth / 2, 0, this);
-        this.statsBoard = new StatsBoard(this.window);
-        this.obstacleManager = new ObstacleManager(this.window);
-
-        this.dom.addEventListener('keydown', this.handleKeyDown.bind(this));
-    }
-
-    init() {
-        this.obstacleManager.placeInitialObstacles();
-    }
-
+    #_window = null;
     
+    #_mode = 'easy';
+
+    #_skierSpeed = 10;
+
+    #_rhinoSpeed = 10;
+
+    get skierSpeed() {
+        return this.#_skierSpeed;
+    }
+
+    get rhinoSpeed() {
+        return this.#_rhinoSpeed;
+    }
+
     set pause(state) {
         this.#_pause = state;
+    }
+
+    get crashed() {
+        return this.#_crashed;
     }
     
     get pause() {
@@ -62,6 +60,39 @@ export class Game {
     }
     get obstacle() {
         return this.#_obstacle;
+    }
+
+    get gameOver() {
+        return this.#_end;
+    }
+
+    constructor({ win, mode } = {}) {
+
+        if (mode === 'easy') {
+            this.#_skierSpeed = 5;
+            this.#_rhinoSpeed = 5;
+        }
+
+
+        this.#_window = win || window;
+        this.dom = this.#_window.document;
+        this.dom.body.style = wrapperStyle;
+        
+        this.#_mode = mode || 'easy';
+
+        this.assetManager = new AssetManager();
+        this.canvas = new Canvas(this.#_window.innerWidth, this.#_window.innerHeight, this.#_window);
+        this.skier = new Skier(0, 0, this);
+
+        this.rhino = new Rhino(this.#_window.innerWidth / 2, 0, this);
+        this.statsBoard = new StatsBoard(this.#_window);
+        this.obstacleManager = new ObstacleManager(this.#_window);
+
+        this.dom.addEventListener('keydown', this.handleKeyDown.bind(this));
+    }
+
+    init() {
+        this.obstacleManager.placeInitialObstacles();
     }
 
     resetObstacle() {
@@ -78,9 +109,7 @@ export class Game {
         this.updateGameWindow();
         this.drawGameWindow();
         
-
         requestAnimationFrame(this.run.bind(this));
-        
     }
 
     setGameOver() {
@@ -88,29 +117,18 @@ export class Game {
         this.#_end = true;
     }
 
-    get gameOver() {
-        return this.#_end;
-    }
-
     updateGameWindow() {
-        
         if (this.#_end) {
             return;
         }
         
-        // if is there a hit, then pause updateGameWindow
         if (this.pause) {
             return;
         }
 
-
         if (this.#_isEating) {
             return;
         }
-
-        /* if (!this.skier.isMoving) {
-            return;
-        } */
 
         this.statsBoard.setTime();
 
@@ -124,8 +142,12 @@ export class Game {
         this.statsBoard.setStyle(this.skier.style);
         
         this.skier.move();
+        
+        const timeNow = (new Date()).getTime();
+        console.log(Math.round((timeNow - this.statsBoard.startTime) / 1000));
+        // if()
 
-        this.rhino.move();
+        // this.rhino.move();
 
         this.calculateGameWindow();
 
@@ -138,34 +160,39 @@ export class Game {
             if (isHit._assetName === 'jumpRamp') {
                 
             } else {
+                this.#_crashed = true;
                 this.obstacle = isHit;
             }
         }
         
-        const isEating = this.rhino.checkIfRhinoHitSkier(this.assetManager);
-        if (isEating) {
-            this.skier.assetName = '';
-            this.#_isEating = true;
+        if (this.rhino) {
+            const isEating = this.rhino.checkIfRhinoHitSkier(this.assetManager);
+            if (isEating) {
+                this.skier.assetName = '';
+                this.#_isEating = true;
+            }
         }
+        
     }
 
     drawGameWindow() {
         this.canvas.setDrawOffset(this.#_gameWindow.left, this.#_gameWindow.top);
 
         this.skier.draw(this.canvas, this.assetManager);
+        if (this.rhino) {
+            this.rhino.draw(this.canvas, this.assetManager);    
+        }
         
-        this.rhino.draw(this.canvas, this.assetManager);
         
         this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
     }
 
     calculateGameWindow() {
-        
         const skierPosition = this.skier.getPosition();
-        const left = skierPosition.x - (this.window.innerWidth / 2);
-        const top = skierPosition.y - (this.window.innerHeight / 2);
+        const left = skierPosition.x - (this.#_window.innerWidth / 2);
+        const top = skierPosition.y - (this.#_window.innerHeight / 2);
 
-        this.#_gameWindow = new Rect(left, top, left + this.window.innerWidth, top + this.window.innerHeight);
+        this.#_gameWindow = new Rect(left, top, left + this.#_window.innerWidth, top + this.#_window.innerHeight);
     }
 
     triggerKeyDown(key = Constants.KEYS.DOWN) {
@@ -185,35 +212,35 @@ export class Game {
         }
         switch(event.which) {
             case Constants.KEYS.LEFT:
-                if (this.pause) { 
-                    this.pause = false;
+                if (this.#_crashed) { 
+                    this.#_crashed = false;
                 }
                 this.skier.turnLeft();
                 event.preventDefault();
                 break;
             case Constants.KEYS.RIGHT:
-                if (this.pause) {
+                if (this.#_crashed) {
                     break;
                 }
                 this.skier.turnRight();
                 event.preventDefault();
                 break;
             case Constants.KEYS.UP:
-                if (this.pause) {
+                if (this.#_crashed) {
                     break;
                 }
                 this.skier.turnUp();
                 event.preventDefault();
                 break;
             case Constants.KEYS.DOWN:
-                if (this.pause) {
+                if (this.#_crashed) {
                     break;
                 }
                 this.skier.turnDown();
                 event.preventDefault();
                 break;
             case Constants.KEYS.JUMP1:
-                if (this.pause) {
+                if (this.#_crashed) {
                     break;
                 }
                 this.skier.jump();
