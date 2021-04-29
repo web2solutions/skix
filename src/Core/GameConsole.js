@@ -1,5 +1,6 @@
 
 import * as Constants from "../Constants";
+import * as voodux from "voodux";
 
 // styles
 import {
@@ -14,6 +15,36 @@ import {
 // game
 import { Game } from './Game';
 
+const schema = new voodux.Foundation.Schema({
+    name: {
+        type: String,
+        required: true,
+        index: true
+    },
+    style: {
+        type: Number,
+        required: true,
+        index: true,
+        default: 0
+    },
+    time: {
+        type: Number,
+        required: true,
+        index: true,
+        default: 0
+    },
+    distance: {
+        type: Number,
+        required: true,
+        index: true,
+        default: 0
+    },
+    date: {
+        type: Date,
+        default: Date.now,
+        index: true
+    }
+});
 export class GameConsole {
     
     #_window = null;
@@ -30,6 +61,10 @@ export class GameConsole {
 
     #_game = null;
 
+    #_playerName = null;
+
+    #_dataAPI = null;
+
     get scenarioX() {
         return this.#_scenarioX;
     }
@@ -44,7 +79,8 @@ export class GameConsole {
         this.#_dom.body.style = wrapperStyle;
         this.#_wrapper = this.#_dom.body;
         this.#_scenarioY =  (6000 - this.#_window.innerHeight) * (-1);
-        this.#_scenarioX = - (this.#_window.innerWidth /2 );
+        this.#_scenarioX = - (this.#_window.innerWidth / 2);
+    
     }
 
     #_renderScenario() {
@@ -123,7 +159,8 @@ export class GameConsole {
         this.#_dom.body.innerHTML = '';
         this.#_game = new Game({
             win: this.#_window,
-            mode
+            mode,
+            console: this
         });
         
         this.#_game.load().then(() => {
@@ -132,14 +169,59 @@ export class GameConsole {
         });
     }
 
-    renderWelcome() {
-        this.#_renderScenario();
-        this.#_renderSnow();
-        this.#_renderTram();
-        this.#_renderControls();
+    start() {
+        (async () => {
+            const foundation = new voodux.Foundation({
+                name: "SkiFree",
+                schemas: {
+                    Game: schema
+                }
+            });
+    
+            const start = await foundation.start();
+            if (start.error) {
+                alert(start.error);
+                return;
+            }
 
-        this.#_runScenario();
-        this.#_runSnow();
+            this.#_dataAPI = foundation.data;
+            // const Eduardo = await Game.add({
+            //    name: 'Eduardo Almeida',
+            //    username: 'web2'
+            // })
+
+            if (!this.askName()) {
+                return;
+            }
+            
+            this.#_renderScenario();
+            this.#_renderSnow();
+            this.#_renderTram();
+            this.#_renderControls();
+    
+            this.#_runScenario();
+            this.#_runSnow();
+        })();
+    }
+
+    askName() {
+        let name = window.prompt(`SkiFree Game info: Press the keys to: left arrow: go left, right arrow: go right, up arrow: go up, down arrow: go down, shift: jump.
+        \n  Please type your name to start:
+        `, 'guest');
+        if (name === '') {
+            name = 'guest';
+        }
+        this.#_playerName = name;
+        return this.#_playerName;
+    }
+
+    async saveMatch({ distance, style, time }) {
+        await this.#_dataAPI.Game.add({
+            name: this.#_playerName,
+            time,
+            distance,
+            style
+        });
     }
 }
 

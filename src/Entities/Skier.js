@@ -25,6 +25,7 @@ export class Skier extends Entity {
         return (
             this.direction === Constants.SKIER_DIRECTIONS.LEFT
             || this.direction === Constants.SKIER_DIRECTIONS.RIGHT
+            || this.direction === Constants.SKIER_DIRECTIONS.CRASH
         );
     }
 

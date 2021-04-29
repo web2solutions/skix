@@ -31,6 +31,8 @@ export class Game {
     
     #_mode = 'easy';
 
+    #_gameConsole = null;
+
     #_skierSpeed = 10;
 
     #_rhinoSpeed = 10;
@@ -66,11 +68,15 @@ export class Game {
         return this.#_end;
     }
 
-    constructor({ win, mode } = {}) {
+    constructor({ win, mode, console } = {}) {
 
         if (mode === 'easy') {
             this.#_skierSpeed = 5;
             this.#_rhinoSpeed = 5;
+        }
+
+        if (console) {
+            this.#_gameConsole = console;
         }
 
 
@@ -115,6 +121,13 @@ export class Game {
     setGameOver() {
         this.#_isEating = false;
         this.#_end = true;
+        (async () => {
+            this.#_gameConsole.saveMatch({
+                distance: this.statsBoard.distance,
+                style: this.statsBoard.style,
+                time: this.statsBoard.time
+            });
+        })();
     }
 
     updateGameWindow() {
@@ -130,9 +143,9 @@ export class Game {
             return;
         }
 
-        if (this.#_crashed) {
-            return;
-        }
+        // if (this.#_crashed) {
+        //    return;
+        // }
 
         this.statsBoard.setTime();
 
@@ -177,6 +190,7 @@ export class Game {
         const isEating = this.rhino.checkIfRhinoHitSkier(this.assetManager);
             if (isEating) {
                 this.skier.assetName = '';
+                this.statsBoard.setSpeed(0);
                 this.#_isEating = true;
             }
         

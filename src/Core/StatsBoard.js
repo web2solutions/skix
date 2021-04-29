@@ -3,8 +3,10 @@ import { statsBoard } from './Styles';
 export class StatsBoard {
     #_win = null;
     #_board = null;
-    #_ms = 0;
+    
+    #_time = 0;
     #_distance = 0;
+    #_style = 0;
 
     #_timeDisplay = null;
     #_distanceDisplay = null;
@@ -13,11 +15,24 @@ export class StatsBoard {
 
     #_timeStart = (new Date()).getTime();
 
-    #_style = 0;
 
     get startTime() {
         return this.#_timeStart;
     }
+
+    get time () {
+        return this.#_time;
+    }
+
+    get style () {
+        return this.#_style;
+    }
+
+    get distance () {
+        return this.#_distance;
+    }
+
+    
 
     constructor(win) {
         this.#_win = win;
@@ -44,9 +59,9 @@ export class StatsBoard {
         let timeDiff = endTime - this.#_timeStart;
         timeDiff /= 1000;
         const seconds = Math.round(timeDiff);
-        const min = Math.round(seconds / 60);
-        const hour = Math.round(min / 60);
-        this.#_timeDisplay.innerText = `Time: ${hour}:${min}:${seconds}`;
+        this.#_time = seconds;
+        
+        this.#_timeDisplay.innerText = `Time: ${this.#_time} seconds`;
     }
 
     renderDistanceDisplay() {
@@ -57,6 +72,7 @@ export class StatsBoard {
 
     setDistance(distance = 0) {
         this.#_distanceDisplay.innerText = `Distance: ${distance}m`;
+        this.#_distance = distance;
     }
 
     renderSpeedDisplay() {
@@ -77,6 +93,7 @@ export class StatsBoard {
 
     setStyle(style = 0) {
         this.#_styleDisplay.innerText = `Style: ${style}`;
+        this.#_style = style;
     }
 
 }
