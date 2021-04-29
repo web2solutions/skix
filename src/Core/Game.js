@@ -148,19 +148,16 @@ export class Game {
             this.statsBoard.setSpeed(0);
         }
         
-        
-        
         this.statsBoard.setStyle(this.skier.style);
         
         this.skier.move();
 
         const timeNow = (new Date()).getTime();
         const timeDiffer = (timeNow - this.statsBoard.startTime) / 1000;
-        if (timeDiffer > 30) {
+        if (timeDiffer > Constants.RHINO_START_AFTER) {
             this.rhino.move();    
         }
         
-
         this.calculateGameWindow();
 
         this.obstacleManager.placeNewObstacle(this.#_gameWindow, previousGameWindow);

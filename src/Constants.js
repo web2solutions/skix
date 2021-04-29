@@ -63,6 +63,8 @@ export const RHINO_LIFT = 'rhinoLift';
 export const RHINO_RUN_LEFT = 'rhinoRunLeft';
 export const RHINO_RUN_LEFT_2 = 'rhinoRunLeft2';
 
+export const RHINO_START_AFTER = 30; // seconds
+
 // export const RHINO_STARTING_SPEED = 5;
 // export const RHINO_DOUBLE_SPEED = RHINO_STARTING_SPEED * 2;
 export const RHINO_DIAGONAL_SPEED_REDUCER = 1.4142;
