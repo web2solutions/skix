@@ -130,6 +130,10 @@ export class Game {
             return;
         }
 
+        if (this.#_crashed) {
+            return;
+        }
+
         this.statsBoard.setTime();
 
         const previousGameWindow = this.#_gameWindow;
@@ -137,8 +141,15 @@ export class Game {
         this.#_n += 1;
         
         const distance = Math.round(this.#_n / 5);
-        this.statsBoard.setDistance(distance);
-        this.statsBoard.setSpeed(this.skier.speed);
+        if (!this.skier.isIdle) {
+            this.statsBoard.setDistance(distance);
+            this.statsBoard.setSpeed(this.skier.speed);
+        } else {
+            this.statsBoard.setSpeed(0);
+        }
+        
+        
+        
         this.statsBoard.setStyle(this.skier.style);
         
         this.skier.move();
