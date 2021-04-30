@@ -1,3 +1,5 @@
+"use strict";
+
 import { statsBoard } from './Styles';
 
 export class StatsBoard {

@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * import binary assets
  * This provides support to unit test alongside visual test

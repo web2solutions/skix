@@ -1,3 +1,4 @@
+"use strict";
 // images
 import bg1_bin from '../../bin/bg1_bin';
 import snow_bin from '../../bin/snow_bin';
@@ -45,8 +46,6 @@ export const buttonControlStyle = `
 `;
 
 
-
-
 export const scenarioStyle = function () {
     return (`
         width: 100vw;
@@ -85,3 +84,16 @@ export const styleSnow = function () {
         z-index: 1;
     `);
 };
+
+export const rankBoardStyle =  `
+    width: 70vw;
+    height: 70vh;
+    background: #ccc;
+    z-index: 6;
+    top: 15vh;
+    left: 15vw;
+    border-radius: 5px;
+    position: absolute;
+    opacity: 0.9;
+    display: none;
+`;

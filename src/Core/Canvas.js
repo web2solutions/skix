@@ -1,3 +1,4 @@
+"use strict";
 export class Canvas {
     x = 0;
     y = 0;

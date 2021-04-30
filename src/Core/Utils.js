@@ -1,3 +1,5 @@
+"use strict";
+
 export function randomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
