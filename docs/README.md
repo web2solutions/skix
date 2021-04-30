@@ -141,3 +141,4 @@ Rather building a back end to persist data, I have added [voodux](https://web2so
 
 1. Implement better UI for asking player name.
 2. Give the player an option after being ate by rhino.
+3. Refactor game console.
