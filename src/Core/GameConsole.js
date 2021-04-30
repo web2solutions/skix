@@ -131,7 +131,7 @@ export class GameConsole {
             .onclick = this.#_startGame.bind(this, 'hard');
         document
             .getElementById(Constants.CHECK_RANK)
-            .onclick = this.#_rankBoard.show.bind(this.#_rankBoard);
+            .onclick = this.#_rankBoard.toogle.bind(this.#_rankBoard);
     }
 
     #_startGame(mode) {
@@ -208,7 +208,7 @@ export class GameConsole {
 }
 
 function controlButtonsTemplate () {
-    return (`
+    return (/* html */`
     <button
         style="${buttonControlStyle}"
         id="${Constants.START_GAME_EASY}"

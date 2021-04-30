@@ -51,6 +51,10 @@ export class Game {
         this.#_pause = state;
     }
 
+    get window() {
+        return this.#_window;
+    }
+
     get crashed() {
         return this.#_crashed;
     }
@@ -133,7 +137,21 @@ export class Game {
                 style: this.statsBoard.style,
                 time: this.statsBoard.time
             });
+
+            setTimeout(this.restart.bind(this), 1000);
         })();
+    }
+
+    restart() {
+        this.#_pause = false;
+        this.#_obstacle = null;
+        this.#_crashed = false;
+
+        this.#_end = false;
+        this.#_n = 0;
+        this.#_isEating = false;
+
+        this.skier.setDirection(3);
     }
 
     updateGameWindow() {

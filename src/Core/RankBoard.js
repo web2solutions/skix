@@ -4,7 +4,8 @@ import {
     rankBoardStyle
 } from './Styles';
 
-const tableTemplate = `
+
+const tableTemplate = /* html */`
     <thead>
         <tr>
             <th>Name</th>
@@ -14,9 +15,7 @@ const tableTemplate = `
             <th>Date</th>
         </tr>
     </thead>
-    <tbody>
-
-    </tbody>
+    <tbody></tbody>
 `;
 
 export class RankBoard {
@@ -73,7 +72,7 @@ export class RankBoard {
         });
     }
 
-    show() {
+    toogle() {
         this.#_rankBoard.style.display = this.#_rankBoard.style.display === 'block' ? 'none' : 'block';
     }
 }
