@@ -87,7 +87,7 @@ export const styleSnow = function () {
 
 export const rankBoardStyle =  `
     width: 70vw;
-    height: 70vh;
+    height: 60vh;
     background: #ccc;
     z-index: 6;
     top: 15vh;
