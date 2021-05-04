@@ -147,7 +147,10 @@ Inside some classes such as Game and GameConsole there is a reference to the bro
 2. Give the player an option after being ate by rhino.
 3. Refactor game console.
 4. Deprecate voodux usage in favor of native IndexedDB API to reduce the bundle size. 
-
+5. Write more unit tests.
+6. Write more e2e tests.
+7. Code coverage.
+8. Code documentation. jsDoc is already set up.
 
 ## Known bugs
 
