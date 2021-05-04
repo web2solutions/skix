@@ -1,6 +1,7 @@
 
 "use strict";
 
+import Swal from 'sweetalert2';
 import * as Constants from "../Constants";
 import { wrapperStyle } from './Styles';
 import { AssetManager } from "./AssetManager";
@@ -38,6 +39,7 @@ export class Game {
     #_skierSpeed = 10;
 
     #_rhinoSpeed = 10;
+    
 
     get skierSpeed() {
         return this.#_skierSpeed;
@@ -75,8 +77,10 @@ export class Game {
     }
 
     constructor({ win, mode, console } = {}) {
+        
+        this.#_mode = mode || 'easy';
 
-        if (mode === 'easy') {
+        if (this.#_mode === 'easy') {
             this.#_skierSpeed = 5;
             this.#_rhinoSpeed = 5;
         }
@@ -94,7 +98,7 @@ export class Game {
         this.dom = this.#_window.document;
         this.dom.body.style = wrapperStyle;
         
-        this.#_mode = mode || 'easy';
+        
 
         this.assetManager = new AssetManager();
         this.canvas = new Canvas(this.#_window.innerWidth, this.#_window.innerHeight, this.#_window);
@@ -131,15 +135,36 @@ export class Game {
     setGameOver() {
         this.#_isEating = false;
         this.#_end = true;
-        (async () => {
-            this.#_gameConsole.saveMatch({
-                distance: this.statsBoard.distance,
-                style: this.statsBoard.style,
-                time: this.statsBoard.time
-            });
+        if (this.#_gameConsole) {
+            (async () => {
+                this.#_gameConsole.saveMatch({
+                    distance: this.statsBoard.distance,
+                    style: this.statsBoard.style,
+                    time: this.statsBoard.time
+                });
+                this.whatNext();
+                
+            })();
+        }
+        
+    }
 
-            setTimeout(this.restart.bind(this), 1000);
-        })();
+    whatNext() {
+        Swal.fire({
+            title: 'Do you want to play again?',
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: 'Yes'
+            // denyButtonText: `Don't save`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                this.restart();
+            } else {
+                this.#_window.document.location.reload();
+            }
+        });
+        // reload window
     }
 
     restart() {
@@ -151,7 +176,10 @@ export class Game {
         this.#_n = 0;
         this.#_isEating = false;
 
-        this.skier.setDirection(3);
+        this.skier.restart();
+        this.rhino.restart();
+
+        this.statsBoard.startTime = (new Date()).getTime();
     }
 
     updateGameWindow() {
@@ -212,11 +240,12 @@ export class Game {
         }
         
         const isEating = this.rhino.checkIfRhinoHitSkier(this.assetManager);
-            if (isEating) {
-                this.skier.assetName = '';
-                this.statsBoard.setSpeed(0);
-                this.#_isEating = true;
-            }
+        if (isEating) {
+            this.skier.assetName = '';
+            this.statsBoard.setSpeed(0);
+            this.#_isEating = true;
+            setTimeout(this.setGameOver.bind(this), 1500);
+        }
         
     }
 

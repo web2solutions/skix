@@ -22,6 +22,10 @@ export class StatsBoard {
         return this.#_timeStart;
     }
 
+    set startTime(time) {
+        return this.#_timeStart = time;
+    }
+
     get time () {
         return this.#_time;
     }

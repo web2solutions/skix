@@ -59,6 +59,7 @@
     "core-js": "^2.6.12",
     "cypress": "^7.1.0",
     "style-loader": "^0.23.1",
+    "sweetalert2": "^10.16.7",
     "voodux": "0.0.16"
   },
   "presets": [

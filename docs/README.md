@@ -130,15 +130,26 @@ Rank Database. It is saving the match data to indexeDB through [voodux](https://
 
 `NOTE 1`:
 
-This is a VanilaJS implementation. For sure we can decrease the development time and improve the `game experience` by using 3 party libraries or framework, but the main idea is to show how to do things with pure JS.
+Except for the `pop up widgets` and `data persistence` features, this game is a VanilaJS implementation. For sure we can decrease the development time and improve the `game experience` by using 3 party libraries or framework, but the main idea is to show how to do things with pure JS.
 
 `NOTE 2`:
 
 Rather building a back end to persist data, I have added [voodux](https://web2solutions.github.io/voodux/code/index.html) to the project to persist data in a local nosql database.
 
 
+`NOTE 3`:
+
+Inside some classes such as Game and GameConsole there is a reference to the browser global window object. It may sounds dumb, but it provides support to visual testing throuhg Cypress. Cypress works by rendering the tested code in a iframe in the right side of the screen when you run it in a non headless mode.
+
 ## Improvement suggestions:
 
 1. Implement better UI for asking player name.
 2. Give the player an option after being ate by rhino.
 3. Refactor game console.
+4. Deprecate voodux usage in favor of native IndexedDB API to reduce the bundle size. 
+
+
+## Known bugs
+
+1. When rhino is running into skier direction AND if iskier direction 
+2. There are some cases where you are fast pressing arrows and you are eaten by rhino, the skier reappears in the screen.

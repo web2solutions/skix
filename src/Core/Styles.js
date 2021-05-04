@@ -96,4 +96,5 @@ export const rankBoardStyle =  `
     position: absolute;
     opacity: 0.9;
     display: none;
+    overflow: scroll;
 `;

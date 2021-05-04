@@ -8,6 +8,15 @@ export class Rhino extends Entity {
     #_direction = Constants.RHINO_DIRECTIONS.RUN_LEFT;
     #_eating = false;
     #_speed = 0;
+
+    #_end = false;
+
+    #_x = null;
+    #_y = null;
+
+    #_rqID = null;
+
+    #_originalSpeed = 0;
     
     get speed() {
         return this.#_speed;
@@ -15,12 +24,28 @@ export class Rhino extends Entity {
 
     constructor(x, y, _game) {
         super(x, y);
+
+        this.#_x = x;
+        this.#_y = y;
+
         this.game = _game;
 
         this.assetName = Constants.RHINO_DEFAULT;
         
         this.#_speed = this.game.rhinoSpeed;
+        this.#_originalSpeed = this.#_speed;
+        this.run();
+    }
 
+    restart() {
+        cancelAnimationFrame(this.#_rqID);
+        this.assetName = Constants.RHINO_DEFAULT;
+        this.y = this.#_y;
+        this.x = this.#_x;
+        this.#_direction = Constants.RHINO_DIRECTIONS.RUN_LEFT;
+        this.#_eating = false;
+        this.#_speed = this.#_originalSpeed;
+        this.#_end = false;
         this.run();
     }
 
@@ -39,7 +64,7 @@ export class Rhino extends Entity {
         } else {
             this.setDirection(Constants.RHINO_DIRECTIONS.RUN_LEFT);
         }
-        requestAnimationFrame(this.run.bind(this));
+        this.#_rqID = requestAnimationFrame(this.run.bind(this));
     }
 
     get direction() {
@@ -56,7 +81,7 @@ export class Rhino extends Entity {
     }
 
     eat(step = null) {
-        if (this.game.gameOver) {
+        if (this.#_end) {
             return;
         }
         let _step = null;
@@ -79,13 +104,12 @@ export class Rhino extends Entity {
                     _step = Constants.RHINO_DIRECTIONS.RHINO_LIFT_EAT_4;
                     break;
                 default:
-                    this.end = true;
-                    this.game.setGameOver();
+                    this.#_end = true;
                     _step = Constants.RHINO_DIRECTIONS.RHINO_LIFT_EAT_4;
                     break;
             }
         }
-        setInterval(() => {
+        setTimeout(() => {
             requestAnimationFrame(this.eat.bind(this, _step));
         }, 200);
         

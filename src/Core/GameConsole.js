@@ -5,6 +5,7 @@ import * as Constants from "../Constants";
 import { Game } from './Game';
 import { RankBoard } from './RankBoard';
 import { schema } from '../data/schema';
+import Swal from 'sweetalert2';
 
 // styles
 import {
@@ -136,16 +137,18 @@ export class GameConsole {
 
     #_startGame(mode) {
         // console.log(mode);
-        this.#_dom.body.innerHTML = '';
-        this.#_game = new Game({
-            win: this.#_window,
-            mode,
-            console: this
-        });
-        
-        this.#_game.load().then(() => {
-            this.#_game.init();
-            this.#_game.run();
+        this.askName().then(() => {
+            this.#_dom.body.innerHTML = '';
+            this.#_game = new Game({
+                win: this.#_window,
+                mode,
+                console: this
+            });
+            
+            this.#_game.load().then(() => {
+                this.#_game.init();
+                this.#_game.run();
+            });
         });
     }
 
@@ -166,9 +169,9 @@ export class GameConsole {
 
             this.#_dataAPI = foundation.data;
 
-            if (!this.askName()) {
+            /* if (!this.askName()) {
                 return;
-            }
+            } */
 
             this.#_rankBoard = new RankBoard({
                 win: this.win,
@@ -186,13 +189,21 @@ export class GameConsole {
         })();
     }
 
-    askName() {
-        let name = window.prompt(`SkiFree Game info: Press the keys to: left arrow: go left, right arrow: go right, up arrow: go up, down arrow: go down, shift: jump.
-        \n  Please type your name to start:
-        `, 'guest');
-        if (name === '') {
-            name = 'guest';
-        }
+    async askName() {
+
+        const { name } = await Swal.fire({
+            title: 'Player info',
+            input: 'text',
+            inputLabel: 'What is your name?',
+            inputValue: 'Guest',
+            showCancelButton: false,
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'You need to write something!';
+                }
+            }
+        });
+
         this.#_playerName = name;
         return this.#_playerName;
     }

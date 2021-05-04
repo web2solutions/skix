@@ -239,5 +239,12 @@ export class Skier extends Entity {
         }
 
         return false;
-    };
+    }
+
+    restart() {
+        
+        this.assetName = Constants.SKIER_DOWN;
+        this.setDirection(3);
+        this.#_speed = this.#_originalSpeed;
+    }
 }
